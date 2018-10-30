@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome!"
+title:  "大地图战争迷雾（未完待续）"
 date:   2018-10-30 10:03:04 +0800
 categories: gameplay
 ---
