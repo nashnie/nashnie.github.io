@@ -30,7 +30,6 @@ LuaInterface.cpp<br>
 
 在 Lua.h 文件中可以找到所有需要导出的API（所有带 LUA_API 标记），在 LuaInterface 中按上图格式导出即可。<br>
 大家如果编译不过，尝试把namespace（slua::）加上去。<br>
-![Lua.h](/images/hook3.png)<br>
 
 ## 如何调试
 启动UE，选择工程，<br>
