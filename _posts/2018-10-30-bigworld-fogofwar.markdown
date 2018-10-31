@@ -58,8 +58,8 @@ fixed4 fragFogOfWar (float3 WorldPos) : SV_Target
 	fixed4 Fog = tex2d(FogOfWar, UV);
 	fixed4 FinalColor = lerp(FogColor, fixed4(1, 1, 1, 1), Fog.g);
 	FinalColor.a = Fog.g;
-    fixed Result = fixed4(1, 1, 1, 1)
-    return Result * FinalColor;
+	fixed Result = fixed4(1, 1, 1, 1)
+	return Result * FinalColor;
 }
 {% endhighlight %}
 大家如果要修改Unity默认的Shader，比如地形、草这些，从官网下载之后在 Fragment 修改完放入自己项目的 Shader 文件夹就可以了。相对路径不能变。<br>
