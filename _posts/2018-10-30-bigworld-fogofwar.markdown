@@ -29,8 +29,9 @@ Scale:地图精度比例
 g 通道看上去有些多余，其实是为了做视野移动时候的缓动效果，同时加上一些速度值就可以做出很不错的效果，本质上就是lerp。
 迷雾FOV算法，八个象限，依次遍历，遇到阻挡就返回，最后的效果一个个小格子实现的近似圆的范围，比如把这个近似圆变成光滑的圆就要用到另一个算法，抗锯齿算法了。<br>
 **多线程加速**，迷雾因为算法的问题，其实计算量是非常大的，尤其是512*512的图。怎么优化呢？我们使用多线程，我们把Texture的数据和计算分开，每一帧数据准备之后，把以上的迷雾范围计算，迷雾过渡的计算都移动到Thread里计算，然后再设置回Texture，只有抗锯齿没有办法移动到线程计算里，这样大大提高了性能。<br>
-同时，这里提一句，我们因为场景建筑物很多，墙体很薄，因为贴图精度问题，导致了迷雾漏光的效果，大家可以想象一下这个诡异的效果，我尝试了很多办法去解决这个问题，比如建筑独立出来，调整角色碰撞半径使得角色不能靠墙太近，角色靠近墙体时候根据角色的面向动态计算迷雾、墙体加厚等等，非常麻烦同时效果不好，最后怎么解决呢？`提高贴图精度`，用256的贴图表示128的区域，1比0.5，甚至可以1比0.25，最后实现的效果就很完美，策划和美术都很满意。
-地图高度图，左下角是建筑物<br>
+同时，这里提一句，我们因为场景建筑物很多，墙体很薄，因为贴图精度问题，导致了迷雾漏光的效果，大家可以想象一下这个诡异的效果，我尝试了很多办法去解决这个问题，比如建筑独立出来，调整角色碰撞半径使得角色不能靠墙太近，角色靠近墙体时候根据角色的面向动态计算迷雾、墙体加厚等等，非常麻烦同时效果不好，最后怎么解决呢？`提高贴图精度`，用256的贴图表示128的区域，1比0.5，甚至可以1比0.25，最后实现的效果就很完美，策划和美术都很满意。<br>
+
+**地图高度图**，左下角是建筑物<br>
 ![ResistenceMap.h](/images/ResistenceMap107.png)<br>
 
 ### 3，迷雾抗锯齿细节
@@ -54,12 +55,12 @@ fixed4 fragDownsample (v2f_tap i) : SV_Target
 {% highlight ruby %}
 fixed4 fragFogOfWar (float3 WorldPos) : SV_Target
 {
-	float2 UV = float2(Remap(WorldPos.x, Origin.x, Origin.x + LevelWidth * Scale, 0, 1), Remap(WorldPos.z, Origin.z, Origin.z + LevelHeight * Scale, 0, 1));
-	fixed4 Fog = tex2d(FogOfWar, UV);
-	fixed4 FinalColor = lerp(FogColor, fixed4(1, 1, 1, 1), Fog.g);
-	FinalColor.a = Fog.g;
-	fixed Result = fixed4(1, 1, 1, 1)
-	return Result * FinalColor;
+    float2 UV = float2(Remap(WorldPos.x, Origin.x, Origin.x + LevelWidth * Scale, 0, 1), Remap(WorldPos.z, Origin.z, Origin.z + LevelHeight * Scale, 0, 1));
+    fixed4 Fog = tex2d(FogOfWar, UV);
+    fixed4 FinalColor = lerp(FogColor, fixed4(1, 1, 1, 1), Fog.g);
+    FinalColor.a = Fog.g;
+    fixed Result = fixed4(1, 1, 1, 1)
+    return Result * FinalColor;
 }
 {% endhighlight %}
 大家如果要修改Unity默认的Shader，比如地形、草这些，从官网下载之后在 Fragment 修改完放入自己项目的 Shader 文件夹就可以了。相对路径不能变。<br>
