@@ -14,13 +14,14 @@ categories: gameplay
 {% highlight ruby %}
 VisionRange&VisionUpRange：迷雾范围和高度
 StartX&StartY：玩家起点
-LevelWidth & LevelHeight ：地图宽高
+LevelWidth&LevelHeight ：地图宽高
 Factions：阵营
 VisionBlocker(ResistenceMapData)：地图阻挡
 Revealed Coverd Undiscover：地图迷雾状态
 FogTexture：迷雾贴图数据
 BlurRenderTexture：抗锯齿贴图数据
 FogColor：迷雾颜色
+Scale:地图精度比例
 ...
 {% endhighlight %}
 ### 2，迷雾计算算法以及多线程加速迷雾计算
@@ -42,10 +43,22 @@ fixed4 fragDownsample (v2f_tap i) : SV_Target
     return color / 4;
 }
 {% endhighlight %}
-### 4，迷雾shader
+### 4，迷雾 Shader
 根据 像素worldPos以及地图宽高、地图起点，计算出UV坐标；<br>
 根据上面的迷雾Texture计算出迷雾的比例，0就是没有迷雾，1就是被迷雾覆盖，0.5是覆盖一半；<br>
 最后根据计算比例插值算出迷雾颜色就好了。迷雾叠加在片段着色器最后计算得出的颜色值上。<br>
+{% highlight ruby %}
+fixed4 fragFogOfWar (float3 WorldPos) : SV_Target
+{
+	float2 UV = float2(Remap(WorldPos.x, Origin.x, Origin.x + LevelWidth * Scale, 0, 1), Remap(WorldPos.z, Origin.z, Origin.z + LevelHeight * Scale, 0, 1));
+	fixed4 Fog = tex2d(FogOfWar, UV);
+	fixed4 FinalColor = lerp(FogColor, fixed4(1, 1, 1, 1), Fog.g);
+	FinalColor.a = Fog.g;
+    fixed Result = fixed4(1, 1, 1, 1)
+    return Result * FinalColor;
+}
+{% endhighlight %}
+
 ### 5，debug迷雾
 ### 6，迷雾编辑器
 ### 7，大地图迷雾设计
