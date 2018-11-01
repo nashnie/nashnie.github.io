@@ -37,6 +37,8 @@ LuaInterface.cpp<br>
 在 Lua.h 文件中可以找到所有需要导出的API（所有带 LUA_API 标记），在 LuaInterface 中按上图格式导出即可。<br>
 大家如果编译不过，尝试把namespace（slua::）加上去。<br>
 
+![变量监视](/images/hook3.png)<br>
+
 ## 如何调试
 启动UE，选择工程，<br>
 打开 LuaStudio 选择，调试>>>>>附加到进程，附加到UE工程进程，<br>
@@ -49,7 +51,6 @@ LuaInterface.cpp<br>
 ![断点成功](/images/debug2.png)<br>
 
 变量监视，输入变量名查看<br>
-![变量监视](/images/debug3.png)<br>
 
 
 最后感谢 LuaStudio 作者轩辕阿建、slua-unreal 作者 Siney 在这个过程中给予的帮助。<br>
