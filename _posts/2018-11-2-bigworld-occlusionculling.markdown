@@ -37,7 +37,16 @@ CPU 上传数据到 GPU 渲染，要经过剔除（过滤），有两种剔除�
 
 流式加载的数据以及简易的数据结构，解决了内存和磁盘暂用较大的问题，同时CPU消耗几乎可以忽略不计；同时方便做基于距离的加载，非常适合大地图方案。当然，缺点就是烘焙时间稍长...<br>
 
+![](/images/bigworld-oc4.png)
+这是全图的效果；<br>
+
+![](/images/bigworld-oc5.png)
+这是加上**遮挡剔除**的效果；<br>
+红色箭头指向的是玩家的位置，地图其他区域已经被剔除掉了。<br>
+
+**以下是代码实现**<br>
 [PotentiallyVisibleSetPlugin](https://github.com/nashnie/PotentiallyVisibleSetPlugin)<br>
+
 希望能帮到你。<br>
 
 For more details see <br>
