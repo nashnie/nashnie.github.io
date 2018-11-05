@@ -2,7 +2,7 @@
 layout: post
 title:  "网络物理同步方案"
 date:   2018-11-05 10:00:00 +0800
-categories: none
+categories: gameplay
 ---
 ## 网络物理同步
 
