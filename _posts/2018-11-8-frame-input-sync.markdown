@@ -48,6 +48,53 @@ categories: gameplay
 客户端根据收到数据来存储 inputbuffer，如果该数据包无某个 player 帧数据，则认为该player 网卡或者掉线等，如无缓存 input，用空白数据填充该 player 的 inputbuffer，伪锁运行逻辑。<br>
 做法大概是这样，有个需要注意的点是包合并的问题，<br>
 
+**解析服务器下发帧同步消息**<br>
+{% highlight C# %}
+void ParseFrameSyncMergeMsg()
+{
+	if (frameSyncMergeMsgList.Count > 0)
+	{
+		MergeRoomMsg mergeRoomMsg = frameSyncMergeMsgList[0];
+		if (mergeRoomMsg.frame <= FightManager.currentNetworkFrame)
+		{
+			playerNumList.Clear();
+			frameSyncMergeMsgList.RemoveAt(0);
+			parseFrameSyncMsgCount++;
+			currentServerNetworkFrame = mergeRoomMsg.frame;
+
+			for (int i = 0; i < mergeRoomMsg.msgs.Count; i++)
+			{
+				MsgRoomMsg msgRoomMsg = mergeRoomMsg.msgs[i];
+				int playerNum = msgRoomMsg.data[0];
+				if (playerNumList.IndexOf(playerNum) < 0)
+				{
+					playerNumList.Add(playerNum);
+				}
+				RemotePlayerController remotePlayerController;
+				remotePlayerController = GetController(playerNum) as RemotePlayerController;
+				if (remotePlayerController != null)
+				{
+					remotePlayerController.OnMessageReceived(msgRoomMsg.data);
+				}
+			}
+
+			if (currentNetworkFrame == mergeRoomMsg.frame)
+			{
+				for (int i = 0; i < maxPlayerInMatch; i++)
+				{
+					int playerNum = i + 1;
+					RemotePlayerController remotePlayerController;
+					remotePlayerController = GetController(playerNum) as RemotePlayerController;
+					remotePlayerController.AddLostMessage();
+				}
+			}
+
+			ParseFrameSyncMergeMsg();
+		}
+	}
+}
+{% endhighlight %}
+
 To be continue...
 
 
