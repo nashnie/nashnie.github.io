@@ -48,7 +48,7 @@ categories: gameplay
 客户端根据收到数据来存储 inputbuffer，如果该数据包无某个 player 帧数据，则认为该player 网卡或者掉线等，如无缓存 input，用空白数据填充该 player 的 inputbuffer，伪锁运行逻辑。<br>
 做法大概是这样，有个需要注意的点是包合并的问题，<br>
 
-**解析服务器下发帧同步消息**<br>
+解析服务器下发的帧同步消息。<br>
 {% highlight C# %}
 void ParseFrameSyncMergeMsg()
 {
