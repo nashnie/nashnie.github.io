@@ -55,7 +55,8 @@ void ParseFrameSyncMergeMsg()
 	if (frameSyncMergeMsgList.Count > 0)
 	{
 		MergeRoomMsg mergeRoomMsg = frameSyncMergeMsgList[0];
-		//收到的包小于当前帧才会解析，大于的话说明当前逻辑还没有执行到对应的帧，需要等逻辑执行完毕，逻辑部分会有对应的加速等逻辑
+		//收到的包小于当前帧才会解析
+		//大于的话说明当前逻辑还没有执行到对应的帧，需要等逻辑执行完毕，逻辑部分会有对应的加速等逻辑
 		if (mergeRoomMsg.frame <= FightManager.currentNetworkFrame)
 		{
 			playerNumList.Clear();
