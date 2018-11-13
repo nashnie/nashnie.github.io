@@ -14,7 +14,7 @@ categories: gameplay
 **难点：**
 1. 对客户端架构要求高，<br>
 	a. 逻辑表现必须分离，方便性能优化以及手感优化；<br>
-	b. 保证数据一致性，必须底层做好所有数据计算的隔离，使用定点数等方案替代浮点数；<br>
+	b. 保证数据一致性，必须底层做好所有数据计算的隔离，使用定点数等方案替代浮点数、随机数种子同步；<br>
 2. 对客户端性能优化要求高，客户端承载了大量的逻辑计算的同时还在保证同屏多人的对战流畅；
 3. 对客户端逻辑要求高，大量复杂的逻辑需要在客户端实现，比如复杂的一整套技能系统，伤害计算、Buff&Debuff等；
 4. 对服务器反外挂要求高;
@@ -55,6 +55,7 @@ void ParseFrameSyncMergeMsg()
 	if (frameSyncMergeMsgList.Count > 0)
 	{
 		MergeRoomMsg mergeRoomMsg = frameSyncMergeMsgList[0];
+		//收到的包小于当前帧才会解析，大于的话说明当前逻辑还没有执行到对应的帧，需要等逻辑执行完毕，逻辑部分会有对应的加速等逻辑
 		if (mergeRoomMsg.frame <= FightManager.currentNetworkFrame)
 		{
 			playerNumList.Clear();
@@ -74,10 +75,12 @@ void ParseFrameSyncMergeMsg()
 				remotePlayerController = GetController(playerNum) as RemotePlayerController;
 				if (remotePlayerController != null)
 				{
+					//解析收到的FrameInput ProcessInputBufferMessage
 					remotePlayerController.OnMessageReceived(msgRoomMsg.data);
 				}
 			}
 
+			//检查是否有player没有完整的FrameInput
 			if (currentNetworkFrame == mergeRoomMsg.frame)
 			{
 				for (int i = 0; i < maxPlayerInMatch; i++)
@@ -89,11 +92,66 @@ void ParseFrameSyncMergeMsg()
 				}
 			}
 
+			//循环解析，网络状况下不好的情况解析多个收到的包
 			ParseFrameSyncMergeMsg();
 		}
 	}
 }
 {% endhighlight %}
+
+如何解析FrameInput的呢？<br>
+
+{% highlight C# %}
+void ProcessInputBufferMessage(InputBufferMessage msg)
+{
+	if (msg.Data != null)
+	{
+		int offset = (int)(msg.CurrentFrame - this.currentFrame);
+		FrameInput frame;
+		int index;
+		for (int i = 0; i < msg.Data.Length; ++i)
+		{
+			frame = msg.Data[i];
+			//计算偏移，小于0说明是冗余包，不要处理，丢弃即可
+			//framedelay（冗余）是客户端决定的，我们默认1-3帧，根据网络状态可以动态调整
+			index = i + offset;
+
+			if (index >= 0)
+			{
+				if (index >= this.inputBuffer.Count)
+				{
+					Dictionary<InputReferences, InputEvents> dict = SpawnerInputEventsList();
+					this.inputBuffer.Add(dict);
+				}
+				
+				foreach (InputReferences input in this.inputReferences)
+				{
+					InputEvents inputEvents = this.inputBuffer[index][input];
+					if (input.inputType == InputType.LeftAxis)
+					{
+						inputEvents.axis = frame.horizontalAxis;
+						inputEvents.axisRaw = frame.verticalAxis;
+					}
+					else
+					{
+						inputEvents.button = (frame.buttons & input.engineRelatedButton.ToNetworkButtonPress()) != 0;
+						if (inputEvents.button)
+						{
+							inputEvents.axis = frame.horizontalRightAxis;
+							inputEvents.axisRaw = frame.verticalRightAxis;
+							inputEvents.percent = frame.percent;
+						}                          
+					}
+
+					inputEvents.currentFrame = this.currentFrame + index;
+				}
+			}
+		}
+	}
+}
+{% endhighlight %}
+
+如何处理FrameDelay的呢？<br>
 
 To be continue...
 
