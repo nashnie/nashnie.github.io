@@ -158,7 +158,7 @@ void ProcessInputBufferMessage(InputBufferMessage msg)
 如何处理FrameDelay的呢？<br>
 使用JitterBuffer。缓存1-3帧Input，使抖动尽量均匀化。<br>
 这个JitterBuffer可以在发送端也可以在接收端处理，发送端处理的话，设计比较清晰，但是发送的包量会大一些，可以通过一些策略优化比如相邻FrameInput如果没变优化成一个Flag等。<br>
-注意点就是一定要保证对应逻辑帧执行对应的输入，保证不同客户端一致性。<br>
+注意点就是一定要保证对应逻辑帧执行对应的输入，保证不同客户端逻辑一致性。<br>
 
 
 
