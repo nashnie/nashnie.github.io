@@ -2,7 +2,7 @@
 layout: post
 title:  "帧同步手游客户端架构设计以及优化心得"
 date:   2018-11-8 10:00:00 +0800
-categories: gameplay
+categories: architecture
 ---
 ## 帧同步手游客户端架构设计以及优化心得
 今天分享一下之前实现过的 MOBA 帧同步的方案。<br>
