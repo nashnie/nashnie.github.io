@@ -35,8 +35,8 @@ Data和View完全脱离，View数据化。当然这个别人想做也做不了�
 ### 心得
 
 设计我们项目的框架，难点在如何和 ECS 完美结合。<br>
-**services-logic-data-view**。<br>
-![LuaInterface.h](/images/ecs-framework1.png)<br> 
+**services-logic-data-view**<br>
+![](/images/ecs-framework1.png)<br> 
 
 Services 提供第三方的数据和功能接口，比如 Input 和 Config、Audio 等。<br>
 View 层接受 ECS Component 的数据变化来渲染，同时发送一些交互事件给 ECS System。ECS System 处理数据的变化执行各种逻辑。Component（DataComponent）粒度越小越好，不要怕麻烦，这是ECS的精髓所在。<br>
@@ -46,6 +46,12 @@ ECS Entity 是各种数据 Component 的集合，所有的对象都是 Entity，
 同时一个 System 也可以是多个 component 组合在一起的逻辑。这就很方便的了，比如只有主角才关心输入，所有我们处理Input的System比如叫 InputProcessSystem，过滤 Input 和主角tag两个 Component 就可以得到我们想要的Entity，然后做输入逻辑。<br>
 游戏内的每个对象都可以拥有 Id、input、hp、gun、dead、direction 等 component，这样一个游戏就可以是很多个System的合体了，比如登陆、匹配、输入、移动、换弹、开枪、瞄准、射击、死亡、复活等。<br>
 基于这个设计，ECS底层可以实现很方便的数据过滤接口，比如过滤出各种符合我们条件的 Group，然后System只需要遍历感兴趣的Entity Group就可以了。这就是和传统的面向对象编程的区别之一，不是面对单个Entity。<br>
+
+**登录和匹配**<br>
+
+![](/images/ecs-framework2.png)<br> 
+
+
 
 >ECS 的设计就是为了管理复杂度，它提供的指导方案就是 Component 是纯数据组合，没有任何操作这个数据的方法；而 System 是纯方法组合，它自己没有内部状态。<br>
 >它要么做成无副作用的纯函数，根据它所能见到的对象 Component 组合计算出某种结果；要么用来更新特定 Component 的状态。<br>
