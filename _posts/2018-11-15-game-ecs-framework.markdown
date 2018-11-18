@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "游戏 ECS 框架心得"
+title:  "游戏 ECS 框架设计"
 date:   2018-11-15 10:00:00 +0800
 categories: framework
 ---
