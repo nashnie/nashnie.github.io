@@ -11,8 +11,8 @@ categories: gameplay
 比如使用定点数修改一些开源的物理引擎，bullet、VelcroPhysics等等，MOBA类游戏的物理需求一般都不会太高，所以自己修改的难度不大，我主导的一个MOBA游戏就是这么做的。
 状态同步就相对复杂了，物理计算部分可以在服务器，也可以在客户端。<br>
 选择客户端的优点
-1. 开发相对容易一些；
-2. 服务器承载没问题；
+1. 开发相对容易很多，服务器搭建物理刚体系统很麻烦；
+2. 物理刚体系统消耗很大，放在客户端计算，不会影响服务器承载人数；
 
 选择客户端的缺点
 1. 外挂问题；
@@ -22,36 +22,42 @@ categories: gameplay
 **还有非常重要的一个优点**，是我们选择客户端来计算物理的原因，客户端计算物理的话，物理效果会好很多，p1(玩家自己)几乎不用考虑网络的问题，就可以做各种物理效果。
 
 ### 具体实现细节
-类似于快照，记录下每个单位的速度、角速度、坐标、旋转等，<br>
+类似于快照（snapshot），记录下每个单位的速度、角速度、坐标、旋转等，服务器转发给其他客户端进行模拟。<br>
 
 {% highlight c# %}
 public struct CubeState
 {
+	//是否激活
     public bool active;
 
     public ushort state;
-
+	//坐标
     public int position_x;
     public int position_y;
     public int position_z;
-
+	
+	//旋转
     public uint rotation_largest;
     public uint rotation_a;
     public uint rotation_b;
     public uint rotation_c;
 
+	//线速度
     public int linear_velocity_x;
     public int linear_velocity_y;
     public int linear_velocity_z;
 
+	//角速度
     public int angular_velocity_x;
     public int angular_velocity_y;
     public int angular_velocity_z;
 }
 {% endhighlight %}
 
-场景单位很多的话，包体大小是个大问题，所以数据结构的优化很重要，<br>
-1. 四元数旋转，只记录xyz，w通过xyz计算得出；
+固定频率快照，然后上传。收到的客户端根据 Id 找到对应刚体，设置坐标和旋转同时根据线速度和角速度进行预测模拟。<br>
+
+场景单位很多的话，包体大小是个大问题，所以数据结构的优化很重要<br>
+1. 四元数旋转，只记录 xyz，w 通过 xyz 计算得出；
 2. 定义数据的上下限以及精度，压缩数据；
 
 {% highlight c# %}
@@ -81,7 +87,10 @@ min 和 max 越准确，越能准确表示压缩的小数。<br>
 选择udp，而不是tcp，基于udp的实时性，高频协议那怕关闭tcp的negla算法，也无法和udp比，没有完美解决方案，udp的缺点在于大家知道的丢包以及同步的流量会加大(...)，所以要开发冗余包机制以及 ack  system…<br>
 
 补充一点，<br>
-继续网络物理同步如何选择host。服务器根据连接的客户端数量决定host上限，比如20%，因为我们游戏类型是玩家可以动态加入，防止游戏开始因为玩家数量过少导致host过少，而掉线导致游戏体验太差，所以开始时要快速添加host到一个最小值，比如5，然后按比例慢慢添加，同时可参考玩家硬件和网络情况。一个临时的思考，应该有漏洞。<br>
+网络物理同步如何选择 host ?<br>
+如果一场游戏过程中，需要固定的几个客户端来完成本地计算，那么可以采用这个方案：<br>
+服务器根据连接的客户端数量决定host上限，比如20%，因为我们游戏类型是玩家可以动态加入，防止游戏开始因为玩家数量过少导致host过少，而掉线导致游戏体验太差，所以开始时要快速添加host到一个最小值，比如5，然后按比例慢慢添加，同时可参考玩家硬件和网络情况。<br>
+
 
 to be continue...<br>
 
