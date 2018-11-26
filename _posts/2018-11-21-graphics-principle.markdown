@@ -33,7 +33,7 @@ Application -> Command -> Geometry -> Rasterization -> Fragment -> Display<br>
 
 一个简单的着色器。vert&frag <br>
 
-{% highlight ruby %}
+{% highlight CG %}
 sampler2D _MainTex;
 float4 _MainTex_ST;
 
@@ -96,11 +96,92 @@ Vertex program 的输出是 Fragment program 的输入。<br>
 ![](/images/graphics-principle2.png)<br>
 
 ## 光照模型以及 PBR
-1. 漫反射
-2. 镜面反射
-3. PBR
+**漫反射<br>**
+
+diffuse = Kd x lightColor x max(N · L, 0)<br>
+1. Kd is the material's diffuse color,
+2. lightColor is the color of the incoming diffuse light,
+3. N is the normalized surface normal,
+4. L is the normalized vector toward the light source, and
+5. P is the point being shaded.
+
+**自发光<br>**
+
+emissive = Ke<br>
+1. Ke is the material's emissive color.
+
+**高光<br>**
+
+specular = Ks x lightColor x facing x (max(N · H, 0)) shininess <br>
+(pow shininess) <br>
+1. Ks is the material's specular color,
+2. lightColor is the color of the incoming specular light,
+3. N is the normalized surface normal,
+4. V is the normalized vector toward the viewpoint,
+5. L is the normalized vector toward the light source,
+6. H is the normalized vector that is halfway between V and L,
+7. P is the point being shaded, and
+8. facing is 1 if N · L is greater than 0, and 0 otherwise.
+
+**环境光<br>**
+
+ambient = Ka x globalAmbient<br>
+1. Ka is the material's ambient reflectance and
+2. globalAmbient is the color of the incoming ambient light.
+
+**Final Color<br>**
+surfaceColor = emissive + ambient + diffuse + specular<br>
+基于上面的算法，我写了个测试 Shader，通过 Shader Toggle 切换显示不同 Final Surface Color各个组成部分。<br>
+
+{% highlight CG %}
+fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+float3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+float3 halfDir = normalize(lightDir + viewDir); 
+
+// sample the texture
+fixed4 albedo = tex2D(_MainTex, i.uv.xy);
+albedo = lerp(albedo, _Color * albedo, i.color.a);
+//emissive = Ke
+//fixed3 emissive = tex2D(_EmissiveTex, i.uv);
+half rim = 1.0 - saturate(dot (normalize(viewDir), normal));
+fixed3 emissive = _RimColor.rgb * pow (rim, _RimPower);
+//ambient = Ka x globalAmbient
+fixed3 ambient = albedo.xyz * UNITY_LIGHTMODEL_AMBIENT.xyz;
+//diffuse = Kd x lightColor x max(N · L, 0)
+fixed3 diffuse = albedo.xyz * _LightColor0.rgb * max(0, dot(normal, lightDir));
+//specular = Ks x lightColor x facing x (max(N · H, 0)) shininess
+fixed3 specular = _Specular * _LightColor0.rgb * pow(max(dot(normal, halfDir), 0), _Shininess * 128) * albedo.a;
+//fixed3 specular = halfDir * 0.5 + 0.5;
+// apply fog
+
+#if ENABLE_EMISSIVE
+	return fixed4(emissive, 1.0); 
+#elif ENABLE_AMBIENT
+	return fixed4(ambient, 1.0);
+#elif ENABLE_DIFFUSE
+	return fixed4(diffuse, 1.0);
+#elif ENABLE_SPECULAR
+	return fixed4(specular, 1.0);
+#endif
+
+fixed4 color = fixed4(emissive + ambient + diffuse + specular, 1.0)
+UNITY_APPLY_FOG(i.fogCoord, color);
+return color;
+{% endhighlight %}
+
+See more detail...
+[LowpolyPBR](https://github.com/nashnie/Shader/blob/master/LowpolyPBR.shader)<br>
+
+**PBR<br>**
+
+1. 光照现象，漫反射并不是各个方面平均发散，微表面模型(NDF)；
+2. 菲涅尔定理(Fresnel)，光源在边角处有更明亮的反光；
+3. 能量守恒，反射的光不能超过入射的光，遮挡因素，越光滑镜面越集中越亮；
+
+To be continue...
 
 参考书籍<br>
 游戏引擎架构<br>
 3D 游戏与计算机图形学中的数学方法<br>
 GPU 编程与CG 语言之阳春白雪下里巴人<br>
+http://developer.download.nvidia.com/CgTutorial/cg_tutorial_chapter05.html
