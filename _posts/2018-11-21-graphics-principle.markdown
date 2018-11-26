@@ -131,7 +131,7 @@ ambient = Ka x globalAmbient<br>
 
 **Final Color<br>**
 surfaceColor = emissive + ambient + diffuse + specular<br>
-基于上面的算法，我写了个测试 Shader，通过 Shader Toggle 切换显示不同 Final Surface Color各个组成部分。<br>
+基于上面的算法，我写了个测试 Shader，通过 Shader Toggle 切换显示 Final Surface Color各个组成部分。<br>
 
 {% highlight CG %}
 fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
