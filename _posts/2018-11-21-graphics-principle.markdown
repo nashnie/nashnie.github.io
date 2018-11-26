@@ -10,7 +10,7 @@ categories: engine
 渲染是一个 CPU 驱动引擎，引擎驱动 OpenGL，OpenGL 驱动 GPU 修改显存的过程。<br>
 VRAM（显存）包括图像缓冲区、深度缓冲、顶点缓冲区、纹理图。<br>
 
-Application >>> Command >>> Geometry >>> Rasterization >>> Fragment >>> Display<br>。
+Application -> Command -> Geometry -> Rasterization -> Fragment -> Display<br>
 
 ## 渲染管线详解
 
@@ -21,7 +21,7 @@ Application >>> Command >>> Geometry >>> Rasterization >>> Fragment >>> Display<
 5. 模型视图投影变换转换对象并将其放入屏幕空间。这些由MVP矩阵描述;
 6. 栅格化三角形以获得像素（它们被称为片段，直到到达最后阶段）;
 7. 片段有阴影。它可以像使用插值颜色或复杂一样简单（应用光照和纹理来获得真实感）;
-8. 片段被组合（混合）以获得单个像素。该组合可以是任何仲裁操作，如混合，或者像向观察者显示最近的像素一样简单。
+8. 片段被组合（混合）以获得单个像素。该组合可以是任何仲裁操作，如混合，或者像向观察者显示最近的像素一样简单;
 
 ![](/images/graphics-principle1.png)<br>
 
