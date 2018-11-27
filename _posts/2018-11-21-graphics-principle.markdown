@@ -95,9 +95,10 @@ Vertex program 的输出是 Fragment program 的输入。<br>
 
 ![](/images/graphics-principle2.png)<br>
 
-## 光照模型以及 PBR
+## 光照模型以及 PBR 
 **漫反射<br>**
 
+粗糙的物体表面向各个方向等强度地反射光，这种等同地向各个方向散射的现象称为光的漫反射（diffuse reflection）。<br>
 diffuse = Kd x lightColor x max(N · L, 0)<br>
 1. Kd is the material's diffuse color,
 2. lightColor is the color of the incoming diffuse light,
@@ -174,10 +175,33 @@ See more detail...
 [LowpolyPBR](https://github.com/nashnie/Shader/blob/master/LowpolyPBR.shader)<br>
 
 **PBR<br>**
-
+PBR 关键点：<br>
 1. 光照现象，漫反射并不是各个方面平均发散，微表面模型(NDF)；
 2. 菲涅尔定理(Fresnel)，光源在边角处有更明亮的反光；
 3. 能量守恒，反射的光不能超过入射的光，遮挡因素，越光滑镜面越集中越亮；
+4. 线性空间；
+
+PBR 算法主要有三项，F & D & G<br>
+![](/images/graphics-principle4.png)<br>
+
+F 是 Fresnel 反射系数（Fresnel reflect term），表示反射方向上的光强占原始光强的比率；<br>
+D 表示微平面分布函数（Beckmann distribution factor），返回的是“给定方向上的微平面的分数值”；<br>
+G 是几何衰减系数（Geometric attenuation term），衡量微平面自身遮蔽光强的影响。N 、V 、L 分别表示法向量、视线方向（从顶点到视点）和入射光方向（从顶点向外）；<br>
+
+UNITY_BRDF_PBS 需要传入以下参数：<br>
+
+{% highlight CG %}
+albedo 反射率
+specularTint 镜面高光颜色
+oneMinusReflectivity 1 - Metallic（1 - _Metallic）
+Smoothness 1 - 粗糙度
+normal 法线
+viewDir 镜头方向
+light 直接光
+indirectLight 间接光
+{% endhighlight %}
+
+网上有很多 PBR 的 shader 我就不班门弄斧了，因为我也不太熟。<br>
 
 To be continue...
 
