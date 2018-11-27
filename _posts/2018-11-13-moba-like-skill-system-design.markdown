@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "MOBA类游戏技能系统设计"
+title:  "MOBA 类游戏技能系统设计"
 date:   2018-11-13 10:00:00 +0800
 categories: gameplay
 ---
 
-## MOBA类游戏技能系统设计
+## MOBA 类游戏技能系统设计
 
 ### 技能数据结构设计
  
