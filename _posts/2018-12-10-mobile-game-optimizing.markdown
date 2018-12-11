@@ -17,7 +17,7 @@ categories: none
 1. 文件压缩，去除无用通道比如Scale，降低精度保持两位有效小数，设置数值范围压缩数据等；
 2. GPU 加速动画播放；
 3. 开启 Unity 的优化选项；
-更多细节 GPU 加速动画渲染方案 https://nashnie.github.io/rendering/2018/11/19/gpu-animator.html<br>
+[更多细节 GPU 加速动画渲染方案](https://nashnie.github.io/rendering/2018/11/19/gpu-animator.html)<br>
 
 ### 渲染
 1. 运行时根据摄像机距离以及手机性能进行 LOD；
@@ -32,7 +32,7 @@ categories: none
 9. 针对老机型（OpenGL ES 2.0 ），使用 ETC1 和 alpha 两张图保存 PNG图片（带有 alpha 通道的图片）；
 11. 慎用 PBR，场景内大部分物件可以使用简单的 PBR，主角等重要物件使用复杂 PBR 渲染；
 12. 使用 lightmap，如不行的话，如果物件之间不能批处理的话（不同材质），那么烘焙代理网格处理实时阴影，解决阴影 drawcall 太多的问题；
-更多细节 ShadowMeshProxy Plugin https://github.com/nashnie/ShadowMeshProxyPlugin<br>
+[更多细节 ShadowMeshProxy Plugin](https://github.com/nashnie/ShadowMeshProxyPlugin)<br>
 13. 特效粒子 TODO...
 14. 静态批处理场景物件；
 15. 动态批处理角色身上的物件，比如武器等，减少 drawcall；
@@ -69,11 +69,9 @@ categories: none
 ### 内存
 1. 更细致的对象池处理；比如基于视野的对象池，如果对象在角色背后，但是在玩家 AOI 逻辑内，逻辑保持运行，显示层直接回收，给其他在玩家视野里的对象使用，最大化缓冲池作用；
 2. 使用离线的遮挡剔除替代 unity 遮挡剔除，节省内存；
-更多细节 基于大地图的遮挡剔除优化方案 https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html<br>
+[更多细节 基于大地图的遮挡剔除优化方案](https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html)<br>
 3. 使用 LOD 加载远距离的物件；
 
 ### UI
 
 ### Debug && Profiler
-
-http://blog.codingnow.com/2017/04/unity3d_memory.html#more
