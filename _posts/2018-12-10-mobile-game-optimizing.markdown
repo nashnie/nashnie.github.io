@@ -65,13 +65,28 @@ categories: none
 9. 使用管理器管理物件的 Update 和 FixedUpdate，替代 Unity 自带的 Update、FixedUpdate的函数，提高性能；
 10. 使用多线程加速热点逻辑计算；切记不要滥用多线程，应该先优化该热点逻辑，然后移至多线程；
 11. 资源销毁，分帧处理；
+12. GC 优化，减少匿名函数使用等；
+
 	
 ### 内存
 1. 更细致的对象池处理；比如基于视野的对象池，如果对象在角色背后，但是在玩家 AOI 逻辑内，逻辑保持运行，显示层直接回收，给其他在玩家视野里的对象使用，最大化缓冲池作用；
 2. 使用离线的遮挡剔除替代 unity 遮挡剔除，节省内存；
 [更多细节 基于大地图的遮挡剔除优化方案](https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html)<br>
 3. 使用 LOD 加载远距离的物件；
+4. 堆内存优化，比如使用定长数组，减少实例化等等；
 
 ### UI
 
 ### Debug && Profiler
+
+如何判断一部手机性能好坏？<br>
+CPU，获取cpu数量以及最大同时运行cpu数量计算出一个值<br>
+GPU，根据不同厂商（nvidia geforce,tegra 等等）GPU型号解析计算出GPU的version(枚举出所有型号的比如填充率，三角形渲染效率等，检测不到的GPU认为是高版本)<br>
+特殊机型特殊处理，比如小米<br>
+特殊情况特殊处理，比如系统内存小于1G，或者cpu、gpu某一项分太低<br>
+安卓和IOS分开处理<br>
+
+调试工具<br>
+WeTest <br>
+Adreno Profiler <br>
+Unity Profiler <br>
