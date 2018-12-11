@@ -34,7 +34,7 @@ categories: none
 11. 慎用 PBR，场景内大部分物件可以使用简单的 PBR，主角等重要物件使用复杂 PBR 渲染；
 12. 使用 lightmap，如不行的话，如果物件之间不能批处理的话（不同材质），那么烘焙代理网格处理实时阴影，解决阴影 drawcall 太多的问题；
 [更多细节 ShadowMeshProxy Plugin](https://github.com/nashnie/ShadowMeshProxyPlugin)<br>
-13. 特效粒子 TODO...
+13. 可程序化粒子特效（可剔除），尽量程序化，如何避免不可程序化；
 14. 静态批处理场景物件；
 15. 动态批处理角色身上的物件，比如武器等，减少 drawcall；
 16. 石头、树木、草丛等使用 GPU Intancing；
@@ -45,6 +45,7 @@ categories: none
 21. GPU Upload(Asynchronous Texture Upload) 设置 Time-Slice 以及 Buffer Size；
 22. 减少 Shader 变体，减少 pass；
 23. Shader warm up；
+24. 场景材质图集合并；
 23. **大地形设计&优化**，这个比较复杂，具体说一下:
 
 	切块（Tile）比如32x32。每个 Tile 分层。地表、LOD0（大型建筑物比如房子）、LOD1（小型物件比如桌子、椅子）、LOD2（很细节物件比如花花草草）、Dynamic（场景动画、特效）。<br>
@@ -66,7 +67,7 @@ categories: none
 9. 使用管理器管理物件的 Update 和 FixedUpdate，替代 Unity 自带的 Update、FixedUpdate的函数，提高性能；
 10. 使用多线程加速热点逻辑计算；切记不要滥用多线程，应该先优化该热点逻辑，然后移至多线程；
 11. 资源销毁，分帧处理；
-12. GC 优化，减少匿名函数使用等；
+12. GC 优化，减少匿名函数使用等；字符串操作是万恶之源！！使用 stringbuilder 或者重写 unity 的 string 解决这个问题；
 
 	
 ### 内存
@@ -75,14 +76,17 @@ categories: none
 [更多细节 基于大地图的遮挡剔除优化方案](https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html)<br>
 3. 使用 LOD 加载远距离的物件；
 4. 堆内存优化，比如使用定长数组，减少实例化等等；
+5. 注意各种资源的格式设置比如mp3等；
 
 ### UI
+1. 动静分离，减少 UI Overdraw；
+2. 如果GPU在绘制UI时时间花费过多，帧调试器指示片段着色器遇到了瓶颈，那么UI很可能是超越GPU承受范围的像素填充率；
 
 ### Debug && Profiler
 
 如何判断一部手机性能好坏？<br>
 CPU，获取cpu数量以及最大同时运行cpu数量计算出一个值<br>
-GPU，根据不同厂商（nvidia geforce,tegra 等等）GPU型号解析计算出GPU的version(枚举出所有型号的比如填充率，三角形渲染效率等，检测不到的GPU认为是高版本)<br>
+GPU，根据不同厂商（nvidia geforce，tegra 等等）GPU型号解析计算出GPU的version(枚举出所有型号的比如填充率，三角形渲染效率等，检测不到的GPU认为是高版本)<br>
 特殊机型特殊处理，比如小米<br>
 特殊情况特殊处理，比如系统内存小于1G，或者cpu、gpu某一项分太低<br>
 安卓和IOS分开处理<br>
@@ -91,3 +95,4 @@ GPU，根据不同厂商（nvidia geforce,tegra 等等）GPU型号解析计算�
 WeTest <br>
 Adreno Profiler <br>
 Unity Profiler <br>
+Unity FrameDebugger <br>
