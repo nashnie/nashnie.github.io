@@ -18,6 +18,7 @@ categories: none
 2. GPU 加速动画播放；
 [更多细节 GPU 加速动画渲染方案](https://nashnie.github.io/rendering/2018/11/19/gpu-animator.html)<br>
 3. 开启 Unity 的优化选项；
+4. 减少关键帧；
 
 ### 渲染
 1. 运行时根据摄像机距离以及手机性能进行 LOD；
@@ -26,7 +27,7 @@ categories: none
 4. Using ASTC Texture Compression for Game Assets；
 5. 一般情况下 Shader 使用低精度代替高精度；
 6. 遮挡剔除&距离剔除&平截头体剔除；
-更多细节 基于大地图的遮挡剔除优化方案 https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html<br>
+[更多细节 基于大地图的遮挡剔除优化方案](https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html)<br>
 7. 开启 Unity 的 Mesh optimizing优化选项；
 8. 优先使用 Vulkan API；
 9. 针对老机型（OpenGL ES 2.0 ），使用 ETC1 和 alpha 两张图保存 PNG图片（带有 alpha 通道的图片）；
