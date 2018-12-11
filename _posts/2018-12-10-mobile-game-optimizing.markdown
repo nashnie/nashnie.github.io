@@ -16,8 +16,8 @@ categories: none
 ### 动画
 1. 文件压缩，去除无用通道比如Scale，降低精度保持两位有效小数，设置数值范围压缩数据等；
 2. GPU 加速动画播放；
-3. 开启 Unity 的优化选项；
 [更多细节 GPU 加速动画渲染方案](https://nashnie.github.io/rendering/2018/11/19/gpu-animator.html)<br>
+3. 开启 Unity 的优化选项；
 
 ### 渲染
 1. 运行时根据摄像机距离以及手机性能进行 LOD；
