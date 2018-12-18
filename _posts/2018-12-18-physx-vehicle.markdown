@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "physx vehicle 笔记"
+title:  "Physx Vehicle 笔记"
 date:   2018-12-18 10:00:00 +0800
 categories: none
 ---
