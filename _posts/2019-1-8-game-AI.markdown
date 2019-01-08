@@ -83,19 +83,35 @@ AI还会将多种关联因素产生的行为随机化处理，这样的设计能
 >对于一个例子，“非常”是正方形隶属函数;由于成员资格值总是小于1，因此会缩小隶属函数。 “非常”将数值分块以提供更大的缩小，而“稍微”通过取平方根来拓宽功能。
 
 ### 群组 AI 设计
-我们通常理解的鱼群算法，使用场景比如 MOBA 游戏的小兵 AI，以及最近很火的一个 IO 类游戏，吞噬星球，玩家带带一堆小兵去吃其他的人，小兵越来越多。<br>
+我们通常理解的鱼群算法，使用场景比如 MOBA 游戏的小兵 AI，以及最近很火的一个 IO 类游戏，吞噬星球，玩家带带一堆小兵去吃其他的人，小兵越来越多等等。<br>
 Group Behaviour-组行为
-1. alignment - 队列 
-2. cohesion - 聚合
-3. separation - 分离
+1. alignment - 队列，企图保持和邻居朝向一致；
+2. cohesion - 聚合，产生力使得 AI 移向邻居的质心；
+3. separation - 分离，产生力使得 AI 离开附近的邻居；
+
+举个聚合算法的例子：
+{% highlight C++ %}
+FVector AverageHeading;
+for (int a = 0; a < Neighbors.Size(); ++a)
+{
+  AverageHeading += Neighbors[a]->Heading();
+}
+if (Neighbors.Size() > 0)
+{
+  AverageHeading = AverageHeading / Neighbors.Size();
+}
+{% endhighlight %}
+如果 AI 本身在 Neighbors 中的话，记得过滤掉。<br>
 
 ### 行为树-有限状态机（数据驱动）
 
 1. Sequence(And)，Select(Or)，Parallel
 2. Check，Negate
 3. 状态机
+4. 配置驱动
 
 ### 总结
+...
 
 For more details see <br>
 [1-artificial_intelligence_fuzzy_logic_systems](http://www.tutorialspoint.com/artificial_intelligence/artificial_intelligence_fuzzy_logic_systems.htm)<br>
