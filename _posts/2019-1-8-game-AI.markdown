@@ -1,0 +1,105 @@
+---
+layout: post
+title:  "游戏中常用的 AI 实现方案"
+date:   2019-1-8 10:00:00 +0800
+categories: gameplay
+---
+### 游戏中常用的 AI 实现方案
+游戏中 AI 的使用场景一直很多，好的 AI 可以画龙点睛。<br>
+
+### 基础 AI 设计
+1. 远程攻击单位（Ranged）：超过最大跟随距离，执行 follow，小于攻击距离，执行 flee，小于跟随距离大于攻击距离执行 idle 或者 attack
+2. 近战攻击单位（Melee）：超过最大跟随距离，执行 follow，小于攻击距离，执行 idle 或者 attack
+
+这个 AI 设计虽然简单，却可以满足很多游戏的需求。<br>
+
+### 常见 AI 以及实现
+1. 靠近 seek，速度向量差 (TargerPos - CurrentPos) * CurrentSpeed；
+2. 离开 flee，速度向量差 (CurrentPos - TargerPos) * CurrentSpeed，然后根据当前方向移动（反方向）移动；
+3. 抵达 arrive，类似靠近，速度值根据阀值递减；
+4. 追逐 pursuit，目标正前方直接走过去，限制角度（比如20以内），预测目标点。预测时间正比于逃避和追逐者的距离，反比于两者速度；
+5. 逃避 evade，类似追逐，远离预测位置；
+6. 徘徊 wander 设置一个 wander distance，然后根据这个 distance 随机一个点，AI 执行 move，移动过去。设置一个 wanderRate，控制 wander 频率；
+7. 回避 avoidance，比较复杂.....TODO
+8. 巡逻 patrol，地图设置几个巡逻点即可；
+
+以上是常见的AI行为的实现思路。<br>
+
+### 复杂 AI 设计
+实现 AI 引擎结构<br>
+1. 制定决策(Decision Making)
+2. 移动（Movement）
+3. 路径规划（Path Planning）
+4. 感知（Perception） 
+
+Fuzzy AI，是很多游戏使用的AI设计基础，比如足球游戏、比如格斗游戏等 （模糊逻辑）。<br>
+
+### 基于 Fuzzy AI 设计格斗游戏 (动作游戏) AI 
+#### AI Rule
+
+1. AI Condition
+比如攻击对象、攻击距离、双方的血量变化等来作为AI触发的条件<br>
+Attacking_AttackType_Self，Attacking_AttackType_Opponent，就是使用某个技能进行攻击行为，该行为可以作为 AI 触发的条件，又比如 Distance_Self，Distance_Opponent，敌我距离判断，这个也可以作为 AI 触发的条件。<br>
+HealthStatus、MovementSpeed等也可以作为 AI 触发的条件。<br>
+
+2. AIRule
+各种条件根据关键字组成很多的条件语句，输入到 AI Engine，产生很多行为。<br>
+{% highlight C# %}
+ string Rule_AND = " AND ";
+ string Rule_Close_Parenthesis = ") ";
+ string Rule_IF = "IF ";
+ string Rule_IS = " IS ";
+ string Rule_NOT = " NOT ";
+ string Rule_Open_Parenthesis = " (";
+ string Rule_OR = " OR ";
+ string Rule_THEN = " THEN ";
+{% endhighlight %}
+
+3. AIReaction
+AI 产生 Idle、MoveBackward、PlayMove_AttackType_Projectile 释放远程技能、PlayMove_Damage_Weak 等等各种行为<br>
+
+4. 根据 AI Rule 初始化 inferenceEngine
+一定间隔内输入更新 inferenceEngine Input 信息（比如当前血量）等和 Output 信息（不是所有Output都有效的，比如眩晕状态下无法释放技能），<br>
+间隔长短决定 AI 难度。<br>
+
+#### AI Engine （模糊逻辑）原理
+根据条件生成隶度值（模糊），多个条件生成的多个隶度值根据最大平均数计算法求出正常值（去模糊化）；<br>
+本质上是根据条件算结果。<br>
+
+![](/images/game-ai1.png)<br>
+
+模糊系统，主要用于解决决策性 AI 系统设计的两大痛点，即 AI 行为的自然程度，以及系统平衡性的维护。<br>
+基于 Fuzzy AI 所产生的 AI 可以综合当前位置、血量及敌方行为的整体情况，来决定下一步是逃跑、撤退、攻击或是补充血量，或是根据玩家行为发生的时间与地点将玩家进行归类。<br>
+AI还会将多种关联因素产生的行为随机化处理，这样的设计能够让AI更接近于真实玩家，表现得更为自然。<br>
+
+ **IF（温度“冷”）然后（加热器“高”）**<br>
+
+![](/images/game-ai2.png)<br>
+
+>该规则使用“温度”输入的值，这是“冷”的一些值，以在“加热器”输出的模糊集中生成结果，这是“高”的某个值。
+>此结果与其他规则的结果一起使用，以最终生成清晰的复合输出。显然，“冷”的值越高，“高”的值就越高，尽管这并不一定意味着输出本身会被设置为“高”，因为这只是众多规则之一。
+>在某些情况下，逻辑函数可以通过相当于副词的“对冲”来修改。常见的对冲包括“约”，“近”，“接近”，“近似”，“非常”，“略微”，“太”，“极端”和“有点”。
+>这些操作可能具有精确的定义，但不同实现之间的定义可能有很大差异。
+>对于一个例子，“非常”是正方形隶属函数;由于成员资格值总是小于1，因此会缩小隶属函数。 “非常”将数值分块以提供更大的缩小，而“稍微”通过取平方根来拓宽功能。
+
+### 群组 AI 设计
+我们通常理解的鱼群算法，使用场景比如 MOBA 游戏的小兵 AI，以及最近很火的一个 IO 类游戏，吞噬星球，玩家带带一堆小兵去吃其他的人，小兵越来越多。<br>
+Group Behaviour-组行为
+1. alignment - 队列 
+2. cohesion - 聚合
+3. separation - 分离
+
+### 行为树-有限状态机（数据驱动）
+
+1. Sequence(And)，Select(Or)，Parallel
+2. Check，Negate
+3. 状态机
+
+### 总结
+
+For more details see <br>
+[1-artificial_intelligence_fuzzy_logic_systems](http://www.tutorialspoint.com/artificial_intelligence/artificial_intelligence_fuzzy_logic_systems.htm)<br>
+[2-Fuzzy_control_system](https://en.wikipedia.org/wiki/Fuzzy_control_system)<br>
+[3-AForge](http://www.cnblogs.com/htynkn/archive/2012/02/03/AForge_1.html)<br>
+[4-AI](http://gad.qq.com/program/translateview/7163282)<br>
+[5-AI](http://gad.qq.com/program/translateview/7158132)<br>
