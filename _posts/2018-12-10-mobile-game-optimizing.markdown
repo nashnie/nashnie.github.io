@@ -30,7 +30,7 @@ categories: none
 [更多细节 基于大地图的遮挡剔除优化方案](https://nashnie.github.io/none/2018/11/01/bigworld-occlusionculling.html)<br>
 7. 开启 Unity 的 Mesh optimizing优化选项；
 8. 优先使用 Vulkan API；
-9. 针对老机型（OpenGL ES 2.0 ），使用 ETC1 和 alpha 两张图保存 PNG图片（带有 alpha 通道的图片）；
+9. 针对老机型（OpenGL ES 2.0），使用 ETC1 和 alpha 两张图保存 PNG图片（带有 alpha 通道的图片）；
 11. 慎用 PBR，场景内大部分物件可以使用简单的 PBR，主角等重要物件使用复杂 PBR 渲染；
 12. 使用 lightmap，如不行的话，如果物件之间不能批处理的话（不同材质），那么烘焙代理网格处理实时阴影，解决阴影 drawcall 太多的问题；
 [更多细节 ShadowMeshProxy Plugin](https://github.com/nashnie/ShadowMeshProxyPlugin)<br>
