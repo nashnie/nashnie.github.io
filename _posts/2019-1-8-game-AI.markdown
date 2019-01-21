@@ -8,20 +8,20 @@ categories: gameplay
 游戏中 AI 的使用场景一直很多，好的 AI 可以画龙点睛。<br>
 
 ### 基础 AI 设计
-1. 远程攻击单位（Ranged）：超过最大跟随距离，执行 follow，小于攻击距离，执行 flee，小于跟随距离大于攻击距离执行 idle 或者 attack
-2. 近战攻击单位（Melee）：超过最大跟随距离，执行 follow，小于攻击距离，执行 idle 或者 attack
+1. 远程攻击单位（Ranged）：超过最大跟随距离，执行 follow，小于攻击距离，执行 flee，逃离目标，小于跟随距离大于攻击距离执行 idle 或者 attack；
+2. 近战攻击单位（Melee）：超过最大跟随距离，执行 follow，小于攻击距离，执行 idle 或者 attack；
 
-这个 AI 设计虽然简单，却可以满足很多游戏的需求。<br>
+这个 AI 设计虽然简单，却可以满足很多游戏 NPC 的需求。<br>
 
 ### 常见 AI 以及实现
-1. 靠近 seek，速度向量差 (TargerPos - CurrentPos) * CurrentSpeed；
+1. 靠近 seek，速度向量差 (TargerPos - CurrentPos) * CurrentSpeed，Tick 计算 AI 坐标，执行移动；
 2. 离开 flee，速度向量差 (CurrentPos - TargerPos) * CurrentSpeed，然后根据当前方向移动（反方向）移动；
-3. 抵达 arrive，类似靠近，速度值根据阀值递减；
-4. 追逐 pursuit，目标正前方直接走过去，限制角度（比如20以内），预测目标点。预测时间正比于逃避和追逐者的距离，反比于两者速度；
+3. 抵达 arrive，类似靠近，速度值根据阀值递减，实现慢慢靠近的效果；
+4. 追逐 pursuit，目标正前方直接走过去，限制角度（比如20以内），预测目标点。设置一个合理的预测时间，建议预测时间正比于逃避和追逐者的距离，反比于两者速度；
 5. 逃避 evade，类似追逐，远离预测位置；
-6. 徘徊 wander 设置一个 wander distance，然后根据这个 distance 随机一个点，AI 执行 move，移动过去。设置一个 wanderRate，控制 wander 频率；
-7. 回避 avoidance，比较复杂.....TODO
-8. 巡逻 patrol，地图设置几个巡逻点即可；
+6. 徘徊 wander 设置一个 wander distance，然后根据这个 distance 随机一个点，AI 执行 move，移动过去。设置一个 wanderRate，控制徘徊频率；
+7. 回避 avoidance（RVO），比较复杂...TODO
+8. 巡逻 patrol，地图设置几个巡逻点即可，遍历各个巡逻点，循环移动；
 
 以上是常见的AI行为的实现思路。<br>
 
@@ -33,6 +33,7 @@ categories: gameplay
 4. 感知（Perception） 
 
 Fuzzy AI，是很多游戏使用的AI设计基础，比如足球游戏、比如格斗游戏等 （模糊逻辑）。<br>
+工作室预研过一款格斗游戏的研发，是我主导的，AI的技能系统就采用了以下这种方式。效果很好。<br>
 
 ### 基于 Fuzzy AI 设计格斗游戏 (动作游戏) AI 
 #### AI Rule
@@ -102,16 +103,11 @@ if (Neighbors.Size() > 0)
 }
 {% endhighlight %}
 如果 AI 本身在 Neighbors 中的话，记得过滤掉。<br>
-
-### 行为树-有限状态机（数据驱动）
-
-1. Sequence(And)，Select(Or)，Parallel
-2. Check，Negate
-3. 状态机
-4. 配置驱动
+每一帧计算队列、聚合、分离，然后按照加权比例，把三种行为的向量加在一起，就是我们AI当前帧的目标方向；<br>
+合适的加权比例需要花时间来调整。<br>
 
 ### 总结
-...
+其他的用于 AI 的技术点，比如状态机、行为树等，都是老生常谈的东西，Sequence(And)、Select(Or)、Parallel 节点配合实现各种各样的 AI，同时配置驱动的话就很好了。
 
 For more details see <br>
 [1-artificial_intelligence_fuzzy_logic_systems](http://www.tutorialspoint.com/artificial_intelligence/artificial_intelligence_fuzzy_logic_systems.htm)<br>
