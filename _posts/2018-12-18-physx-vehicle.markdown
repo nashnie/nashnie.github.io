@@ -29,8 +29,16 @@ mMaxSteer:轮子最大转角（30-90度）<br>
 避免这种情况的一个好方法是过滤在运行时传递给汽车的转向角，以便在更大的速度下产生更小的转向角。该策略将模拟在高速下实现大转向角的难度（在高速时车轮抵抗方向盘施加的转向力）<br>
 mToeAngle: 脚趾角度可用于帮助汽车在转弯后伸直。 这是一个很好的数字，但最好留在0，除非需要进行详细的调整<br>
 
-2. PxVehicleWheelsSimData
-3. PxVehicleSuspensionData
+#### PxVehicleWheelsSimData
+setSuspTravelDirection<br>
+setSuspForceAppPointOffset<br>
+setTireForceAppPointOffset<br>
+setWheelCentreOffset<br>
+
+#### PxVehicleSuspensionData
+mSprungMass:
+mSpringDamperRate:这描述了弹簧消散存储在弹簧中的能量的速率。可以通过调节这个值来控制载具颠簸感。<br>
+
 4. PxVehicleAntiRollBar
 5. PxVehicleTireData
 6. PxVehicleEngineData
@@ -45,5 +53,7 @@ mToeAngle: 脚趾角度可用于帮助汽车在转弯后伸直。 这是一个�
 ### Algorithm
 ...
 
+For more details see <br>
+[Vehicles](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
 
 
