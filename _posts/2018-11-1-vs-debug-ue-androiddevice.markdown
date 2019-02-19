@@ -18,16 +18,17 @@ categories: language
 ### Unreal 符号表文件以及APK准备
 新建一个文件夹，放入需要调试的 Unreal4 Android APK 以及 版本同时生产的 Debug符号表文件，请注意符号表名字一定要是 **libUE4.so**
 ### VisualStudio 新建调试工程
-1. VisualStudio 点击 File>>>Add>>>Existing Project... 添加准备的 Unreal4 Android APK
-2. 在新建的工程上点击 Debug>>>Start new instance
+1. VisualStudio 点击 File -> Add -> Existing Project... 添加准备的 Unreal4 Android APK;
+2. 在新建的工程上点击 Debug -> Start new instance;
 
 ![](/images/vsDebugUEAndroid3.png)
 ### Android ADB 连接检查
-1. 手机 开启开发者模式
-2. cmd > adb devices，查看设备列表
-3. cmd > adb version，查看ADB 版本（ADB 1.0.32 (or later)）
+1. 手机 开启开发者模式;
+2. cmd > adb devices，查看设备列表;
+3. cmd > adb version，查看ADB 版本（ADB 1.0.32 (or later)）;
 
-**CMD**<br>
+**Command**<br>
+
 ![](/images/vsDebugUEAndroid4.png)
 
 如果以上还不行，重启电脑试试。<br>
