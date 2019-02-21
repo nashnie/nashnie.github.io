@@ -98,6 +98,7 @@ GPU，根据不同厂商（nvidia geforce，tegra 等等）GPU型号解析计算
 特殊机型特殊处理，比如小米<br>
 特殊情况特殊处理，比如系统内存小于 1G，或者 cpu、gpu 某一项分太低<br>
 安卓和 IOS 分开处理<br>
+综合以上得出一个总分。<br>
 
 调试工具<br>
 WeTest <br>
