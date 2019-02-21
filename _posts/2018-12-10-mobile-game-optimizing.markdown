@@ -14,7 +14,7 @@ categories: none
 5. 一定要控制好 FixedUpdate 的频率，1s 建议不要执行超过30次，因为是 FixedUpdate 执行 Physics，如果 Update 卡顿，会导致 FixedUpdate 执行多次，继而 Update 更加卡顿形成恶性循环；
 
 ### 动画
-1. 文件压缩，去除无用通道比如Scale，降低精度保持两位有效小数，设置数值范围压缩数据等；
+1. 文件压缩，去除无用通道比如 Scale，降低精度保持两位有效小数，设置数值范围压缩数据等；
 2. GPU 加速动画播放；
 [更多细节 GPU 加速动画渲染方案](https://nashnie.github.io/rendering/2018/11/19/gpu-animator.html)<br>
 3. 开启 Unity 的优化选项；
@@ -55,6 +55,7 @@ categories: none
 	一个区域物件分细节和外观物件两种，离一个区域较近时就应该开始加载外观物件同时卸载细节物件。比如一片树林是外观物件而地上的花花草草则是细节物件。<br>
 	手机内存应用一般可以500M，一定要控制在350M以内。<br>
 26. 正确应用纹理压缩可提供显着的性能优势。在较新的移动设备上，使用 ASTC 压缩的纹理格式。如果目标设备上没有 ASTC，在 Android 上使用 ETC2，在 iOS 上使用 PVRTC；<br>
+27. 一个角色一般三种贴图  Diffuse + Normal + PBR（Metal + Roughness + AO），尺寸512、512、256；
 
 ### 逻辑&网络
 1. 编译设置成 IL2CPP，运行效率较大提升；
@@ -80,6 +81,8 @@ categories: none
 4. 堆内存优化，比如使用定长数组，减少实例化等等；
 5. 注意各种资源的格式设置比如mp3等；
 6. 使用引用计数管理 AssetBundle，防止泄露；
+7. 控制好贴图尺寸，1k 贴图比 512 贴图，因为 mipmap 的原因内存要占用多很多；
+8. 优先使用 ASTC 压缩；
 
 ### UI
 1. 动静分离，减少 UI Overdraw；
