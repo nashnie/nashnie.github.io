@@ -54,6 +54,6 @@ mSpringDamperRate:这描述了弹簧消散存储在弹簧中的能量的速率�
 ...
 
 For more details see <br>
-[Vehicles](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
+[nvidia Vehicles](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
 
 
