@@ -49,7 +49,7 @@ UE提供了一个接口可以帮我生成一个全局唯一的名字供我们使
 设计好 actor 的名字规则之后，我们在就可以 World->SpawnActor 之前就提前在TMAP里存储好我们的数据，key 是玩家唯一资源名字，value 是 PlayerNetData。这样我们spawning过程中，任意的阶段都是可以获取这个 PlayerNetData 的包括 BeginPlay。<br>
 不知道大家注意到没有，在 spawning 过程中，UE World 是发了一个事件出来的，在 BeginPlay 之前，OnActorSpawned broadcast on UWorld。<br>
 看到这个我也是激动了一下，和你一样，但是...<br>
-在测试以及阅读源码之后，发现，这个事件应该也确实是在 BeginPlay 之后发送的，倒是在 Return spawnedActor 之前，不过已经没有更多实际价值了...UE是个伟大的引擎，这是个低级的错误。希望 UE 早日修改这个 bug。<br>
+在测试以及阅读源码之后，发现，这个事件应该也确实是在 BeginPlay 之后发送的，倒是在 Return spawnedActor 之前，不过已经没有更多实际价值了...UE是个伟大的引擎，这是个低级的错误。希望 UE 早日修复这个 bug 或者修改文档...<br>
 <br>
 <br>
 关于 actor 的销毁...<br>
