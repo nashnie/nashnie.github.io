@@ -47,9 +47,9 @@ Name大家都知道是干嘛的，spawn出来actor的资源名字嘛，temp呢�
 很自然的想起来的这个方案，把 ID 当成 name 设置给 actor，但是 UE 有个限制，所有的 actor 的名字必须是唯一的，如果添加了一个名字重复的 actor，会产生很诡异的现象，首先会主动销毁上一个actor，然后当前的actor也会莫名消失，反正都是我们不想看到的。<br>
 UE提供了一个接口可以帮我生成一个全局唯一的名字供我们使用，（这更加验证了我们那名字做文章的思路是对的），这个名字规则很简单，levelName_actorBPTypeName_当前level存在的count++，然后我们把玩家ID拼接在后面，**levelName_actorBPTypeName_当前level存在的count++_NetID**，完美，<br>
 设计好 actor 的名字规则之后，我们在就可以 World->SpawnActor 之前就提前在TMAP里存储好我们的数据，key 是玩家唯一资源名字，value 是 PlayerNetData。这样我们spawning过程中，任意的阶段都是可以获取这个 PlayerNetData 的包括 BeginPlay。<br>
-不知道大家注意到没有，在 spawning 过程中，UE World 是发了一个事件出来的，在BeginPlay，OnActorSpawned broadcast on UWorld。<br>
+不知道大家注意到没有，在 spawning 过程中，UE World 是发了一个事件出来的，在 BeginPlay 之前，OnActorSpawned broadcast on UWorld。<br>
 看到这个我也是激动了一下，和你一样，但是...<br>
-在测试以及阅读源码之后，发现，这个事件应该也确实是在 BeginPlay 之后发送的，倒是在 Return spawnedActor 之前，不过已经没有更多实际价值了...UE是个伟大的引擎，这是个低级的错误。希望 UE 早日修改它。<br>
+在测试以及阅读源码之后，发现，这个事件应该也确实是在 BeginPlay 之后发送的，倒是在 Return spawnedActor 之前，不过已经没有更多实际价值了...UE是个伟大的引擎，这是个低级的错误。希望 UE 早日修改这个 bug。<br>
 <br>
 <br>
 关于 actor 的销毁...<br>
