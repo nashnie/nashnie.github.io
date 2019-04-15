@@ -71,7 +71,19 @@ Throttle、Brake、Steer、Clutch...
 #### Vehicle Wheels Animation
 Wheel 在初始化的时候通过Vehicle Manager 绑定，保证一一对应，然后每一帧根据轮胎的 Index 获取 Wheel LocalPose，在 AnimNode 里渲染。
 
+#### 参数调整
+我们在做坦克的过程中，遇到了很多奇怪的问题，比如坦克在撞击有些障碍物的时候会突然有奇怪的表现，坦克被反弹甚至击飞，后来我们发现这可能是UE的一个bug。<br>
+如果障碍物设置为 BlockAll，但是障碍物的碰撞盒没有设置，载具撞击上障碍物的时候就会表现很奇怪，我们的解决办法是要求美术同事把所有需要设置 Block 的物件都一定要设置对应的 CollisionBox。<br>
+我们还遇到坦克在撞击到时候会原地旋转，速度很快，经过无数次测试发现是因为我们修改 physx 数学库导致的...血的教训。<br>
+关于坦克的爬坡能力，最重要的是坦克自身的 Physics Asset，一定要注意和地面的碰撞，以及轮胎的半径。<br>
+然后就是轮胎力矩和坦克马力比例，保证爬坡时力矩的数值。<br>
+第三点要注意档位的变换，在爬坡时调节 GearboxData 的 SwitchTime 尽量保证档位不要快速切换，让坦克在低档爬坡。<br>
+其他的比如摩擦力等，但是不要一味的调大，过大的摩擦力会导致坦克启动的时候抖动，因为摩擦力太大了，启动困难。<br>
+还有其他的小细节，比如坦克的 SpringStrength，保证坦克在坡面的抖动效果，轮胎履带通过设置 UV 滚动来实现，轮胎压过地面的痕迹通过 Decal 实现等。<br>
 
+### 网络同步
+这个比较常规，预测和插值，预测的时间根据坦克的速度以及 Ping 调节。<br>
+炮台和炮筒的旋转和移动包一起，每0.1s同步一次，插值保证平滑。<br>
 
 更多细节<br>
 [ActorLifecycle](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
