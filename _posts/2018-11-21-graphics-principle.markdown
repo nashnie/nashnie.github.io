@@ -124,6 +124,8 @@ specular = Ks x lightColor x facing x (max(N · H, 0)) shininess <br>
 7. P is the point being shaded, and
 8. facing is 1 if N · L is greater than 0, and 0 otherwise.
 
+![](/images/graphics-principle6.png)<br>
+
 **环境光<br>**
 
 ambient = Ka x globalAmbient<br>

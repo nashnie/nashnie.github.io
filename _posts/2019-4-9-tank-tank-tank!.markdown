@@ -16,6 +16,7 @@ categories: none
 5. 遥感移动，非常复杂的移动逻辑...
 6. 除了这些业务逻辑，我们要做的真实感的坦克，坦克底层的物理（PhysXVehicle）是最困难的部分
 7. 网络同步
+8. AI
 
 ### 载人
 在车门附近配置 volumes，车门挂载socket等，触发上车逻辑，这个很常规，<br>
@@ -84,6 +85,8 @@ Wheel 在初始化的时候通过Vehicle Manager 绑定，保证一一对应，�
 ### 网络同步
 这个比较常规，预测和插值，预测的时间根据坦克的速度以及 Ping 调节。<br>
 炮台和炮筒的旋转和移动包一起，每0.1s同步一次，插值保证平滑。<br>
+
+### AI
 
 更多细节<br>
 [ActorLifecycle](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
