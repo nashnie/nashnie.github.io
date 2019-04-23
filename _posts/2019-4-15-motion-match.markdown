@@ -7,6 +7,8 @@ categories: none
 ### 基于 Motion Matching 的动画方案
 
 1. Motion Matching 概述
+Motion Matching 是一项技术，用来取代大量的繁杂的动画状态机。具体是如何实现的呢？<br>
+
 2. Motion Matching Baking
 3. Motion Matching 预测
 4. Motion Matching 选取最适合的动画 Play
