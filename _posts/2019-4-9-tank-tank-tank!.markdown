@@ -89,4 +89,4 @@ Wheel 在初始化的时候通过Vehicle Manager 绑定，保证一一对应，�
 ### AI
 
 更多细节<br>
-[ActorLifecycle](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
+[physx Vehicles](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
