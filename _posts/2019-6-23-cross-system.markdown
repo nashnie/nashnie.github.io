@@ -44,7 +44,7 @@ AnimPointOffsetZ += FMath::Lerp(0.f, TurnOffset, Alpha);
 
 然后更新 NotifyEvt 对应的点即可，<br>
 落点 Notify 开始之后，强行设置 Z 的值，保证动画落在地面上。<br>
-同样的道理，更新 XY 轴方向上的偏移。<br>
+同样的道理，更新 XY 轴方向上的偏移，多了一步夹角的计算而已。<br>
 
 ### 播放动画
 播放动画，注意关闭 RootMotion。<br>
