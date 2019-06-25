@@ -87,6 +87,9 @@ Wheel 在初始化的时候通过Vehicle Manager 绑定，保证一一对应，�
 炮台和炮筒的旋转和移动包一起，每0.1s同步一次，插值保证平滑。<br>
 
 ### AI
+坦克在复杂地形上移动很复杂，关于AI部分，我后续更新...<br>
+
+感谢阅读。<br>
 
 更多细节<br>
 [physx Vehicles](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html)<br>
