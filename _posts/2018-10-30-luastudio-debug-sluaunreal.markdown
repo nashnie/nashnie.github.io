@@ -41,7 +41,7 @@ LuaInterface.cpp<br>
 
 ## 如何调试
 启动UE，选择工程，<br>
-打开 LuaStudio 选择，调试>>>>>附加到进程，附加到UE工程进程，<br>
+打开 LuaStudio 选择，调试>>>附加到进程，附加到 UE 工程进程，<br>
 运行场景，打断点，就可以了。<br>
 
 附加进程成功<br>
