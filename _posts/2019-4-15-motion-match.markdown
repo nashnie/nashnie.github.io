@@ -7,7 +7,8 @@ categories: none
 ### 基于 Motion Matching 的动画方案
 
 ## Motion Matching 概述
-Motion Matching 源于育碧2016年在GDC的技术分享，为取代复杂的动画状态机而生的下一代动画系统。<br>
+Motion Matching 源于育碧2016年在 GDC 的技术分享，为取代复杂的动画状态机而生的下一代动画系统。<br>
+复杂状态机维护起来很头疼，耗费大量的时间，也容易产生 BUG，Motion Matching 取代了这一步，<br>
 根据玩家输入包括速度、方向、跳跃等和玩家当前骨骼位置、旋转、速度等对比离线烘焙的所有动画骨骼以及根据 RootMotion 预测的坐标数据，选择最匹配的一个动画帧播放。<br>
 具体是如何实现的呢？<br>
 
@@ -101,25 +102,27 @@ public class MotionCostFactorSettings : ScriptableObject
     public float rootMotionVelFactor = 1.5f;
 
     [Tooltip("")]
-    public float predictionTrajectoryPosFactor = 2.0f;
+    public float predictionTrajectoryPosFactor = 20.0f;
 
     [Tooltip("")]
-    public float predictionTrajectoryVelFactor = 2.0f;
+    public float predictionTrajectoryVelFactor = 20.0f;
 
     [Tooltip("")]
-    public float predictionTrajectoryDirFactor = 1.0f;
+    public float predictionTrajectoryDirFactor = 10.0f;
 }
 {% endhighlight %}
 
 ## Motion Matching 优化
 刚才提到的优化，我们这里具体讲一下。<br>
-1. 我们烘焙以及匹配的时候是没必要选择所有的骨骼，一个角色可能五十根左右的骨骼，那么我们选取比较重要的几根就可以了，比如头，脖子，左右手等等。<br>
-2. 同样的，因为考虑到离线数据量以及运行时性能消耗的问题，我们也没必要烘焙每一帧，我的策略是跳帧，每间隔几帧烘焙一次，比如5帧数，当前间隔越小越精确。<br>
-3. 烘焙的数据精度问题，我保留了三位用于减小离线数据的体积。<br>
+1. 我们烘焙以及匹配的时候是没必要选择所有的骨骼，一个角色可能五十根甚至更多的骨骼，我们选取比较重要的七八根根就可以了，比如头，脖子，左右手等等。<br>
+2. 同样的，因为考虑到离线数据大小以及运行时性能消耗的问题，我们也没必要烘焙动画每一帧，我的策略是跳帧，每间隔三五帧烘焙一次，当前间隔越小越精确，帧间隔越大离线数据越大，运行时匹配的消耗也越小。<br>
+3. 烘焙的数据精度问题也影响离线数据大小，保留了三位用于减小离线数据的体积。<br>
 
 ## 总结
-Motion Matching是一种新型的动画系统，使用得当可以大幅减少手工动作量，但是用于手机游戏的话有一定的风险比如 cpu 性能、数据量以及对动画师的要求。<br>
+Motion Matching 是一种新型的动画系统，使用得当可以大幅减少手工动作量，但是用于手机游戏的话有一定的风险比如 cpu 性能、数据量以及对动画师的要求。<br>
 Motion Matching 需要的动画比一般的动画要严格，比如我在写这个库的时候匹配转向动画，发现 Turn 动画第一帧竟然有 RootMotion 的前进速度，导致匹配一直失败...<br>
+最后，我在学习以及编写这个开源库的过程中，确实开括了思路，感谢育碧。<br>
+
 
 感谢阅读。<br>
 
