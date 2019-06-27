@@ -34,13 +34,10 @@ Climb，攀爬<br>
 攀爬和翻越都要检测落点的角度，大于一定的角度，比如70度，坡面太陡，角色是无法落脚的。<br>
 
 {% highlight C# %}
-bool bWalkable = true;
+bool bWalkable = false;
 WalkableFloorAngle = 70;
 WalkableFloorZ = FMath::Cos(FMath::DegreesToRadians(WalkableFloorAngle));
-if (Hit.ImpactNormal.Z < WalkableFloorZ)
-{
-	bWalkable = false;
-}
+bWalkable = Hit.ImpactNormal.Z >= WalkableFloorZ
 {% endhighlight %}
 
 ### 计算动画路径
