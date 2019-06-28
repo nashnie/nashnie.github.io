@@ -36,25 +36,25 @@ Anim Montage 实现了哪些功能呢？<br>
 ### 渲染
 ### Gameplay Framework
 1. Actor、DefaultPawn、Pawn、Character，<br>
-Actor：场景中所有对象，类似 Unity gameobject；<br>
-Pawn：有行动能力，有动画和骨骼，接受 Input，可以被 Controller 控制的单位；<br>
-Character：人形，行走能力（CharacterMovement）和人相似的 pawn；<br>
+Actor:场景中所有对象，类似 Unity gameobject；<br>
+Pawn:有行动能力，有动画和骨骼，接受 Input，可以被 Controller 控制的单位；<br>
+Character:人形，行走能力（CharacterMovement）和人相似的 pawn；<br>
 2. FloatingPawnMovement、CharacterMovement、NavMovement、ProjectileMovement，<br>
-ProjectileMovement::弹道移动控制<br>
-CharacterMovement::人形移动控制，比如走路、游泳、跳跃等<br>
+ProjectileMovement:弹道移动控制<br>
+CharacterMovement:人形移动控制，比如走路、游泳、跳跃等<br>
 3. DamageType，<br>
 伤害系统，point、range...<br>
 4. GamdeMode<br>
 游戏规则玩法，得分、计时等等
 5. GameState、PlayerState，<br>
-GameState::游戏数据<br>
-PlayerState::角色数据<br>
+GameState:游戏数据<br>
+PlayerState:角色数据<br>
 6. PlayerController、PlayerCameraController、AIController<br>
 7. PlayerInput，<br>
 输入控制
 8. SpringArmComponent、PlayerStart，<br>
-SpringArmComponent::弹簧臂<br>
-PlayerStart::出生点<br>
+SpringArmComponent:弹簧臂<br>
+PlayerStart:出生点<br>
 ...
 
 ![ue-game-gramework.h](/images/ue-game-gramework.png)<br>
