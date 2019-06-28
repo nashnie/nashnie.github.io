@@ -33,23 +33,34 @@ Anim Montage 实现了哪些功能呢？<br>
 ### 渲染
 ### Gameplay Framework
 1. Actor、DefaultPawn、Pawn、Character
+Actor：场景中所有对象，类似 Unity gameobject；
+Pawn：有行动能力，接受 Input 的单位；
+Character：人形，行走能力（CharacterMovement）和人相似的 pawn；
 2. FloatingPawnMovement、CharacterMovement、NavMovement、ProjectileMovement
-3. Damage
+ProjectileMovement::弹道移动控制
+CharacterMovement::人形移动控制，比如走路、游泳、跳跃等
+3. DamageType
+伤害系统，point、range...
 4. GamdeMode
-5. GameState
-6. PlayerController、PlayerCameraController
+游戏规则玩法，得分、计时等等
+5. GameState、PlayerState
+GameState::游戏数据
+PlayerState::角色数据
+6. PlayerController、PlayerCameraController、AIController
 7. PlayerInput
-8. SpringArmComponent
-
-看了上面这些引擎自带的Class，你也应该大概明白UE Gameplay Framework 有打强大了吧。这还只是一部分。<br>
+输入控制
+8. SpringArmComponent、PlayerStart
+SpringArmComponent::弹簧臂
+PlayerStart::出生点
+...
+看了上面这些引擎自带的 Class，你也应该大概明白 UE Gameplay Framework 有多完善了吧。这还只是一部分。<br>
 ### 地图和关卡
 ### Delicated Server
 ### 工具链
-比如 UE ability、blueprint、非常丰富的 Debug 指令。
+比如 UE ability、blueprint、非常丰富的 Profiler Debug 指令
 ### 粒子系统
 ### 其他细节
-比如出生角色叠在一起怎么办，UE 自带 adjust location 算法，骨骼自带 muzzle 机制，比如弹簧臂，比如对象池，比如GC，
-同时UE是开源的，这点简直太好了。
+比如出生角色叠在一起怎么办，UE 自带 adjust location 算法，骨骼自带 muzzle 机制，比如弹簧臂，比如特效对象池，比如 GC，同时 UE 是开源的，这点简直太好了。
 
 感谢阅读。<br>
 
