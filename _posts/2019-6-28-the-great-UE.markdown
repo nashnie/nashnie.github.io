@@ -29,32 +29,35 @@ Anim Montage 实现了哪些功能呢？<br>
 2. 同时同类型（ObjectType）的物件可以使用不同的 preset，满足不同的需求。<br>
 
 比如 UE 的 visibility channel，太强大了，比如玻璃，或者草丛这种，玻璃是可视的，但是草丛是不可视的。<br>
-还有 UE physics asset 机制，可以针对头、胸、腿等设置不同的 collider type 和 physics material，以满足不一样的伤害需求，也可以满足比如载具天线刹车时细腻的物理效果表现。<br>
+还有 UE physics asset 机制（Physics Asset Editor），可以针对头、胸、腿等设置不同的 collider type 和 physics material，以满足不一样的伤害需求，也可以满足比如载具天线刹车时细腻的物理效果表现。<br>
 还有 UE 封装的更强大的 PhysX vehicle 的物理效果...
+还有 Blast 和 APEX...
 
 ### 渲染
 ### Gameplay Framework
-1. Actor、DefaultPawn、Pawn、Character，
-Actor：场景中所有对象，类似 Unity gameobject；
-Pawn：有行动能力，有动画和骨骼，接受 Input，可以被 Controller 控制的单位；
-Character：人形，行走能力（CharacterMovement）和人相似的 pawn；
-2. FloatingPawnMovement、CharacterMovement、NavMovement、ProjectileMovement，
-ProjectileMovement::弹道移动控制
-CharacterMovement::人形移动控制，比如走路、游泳、跳跃等
-3. DamageType，
-伤害系统，point、range...
-4. GamdeMode
+1. Actor、DefaultPawn、Pawn、Character，<br>
+Actor：场景中所有对象，类似 Unity gameobject；<br>
+Pawn：有行动能力，有动画和骨骼，接受 Input，可以被 Controller 控制的单位；<br>
+Character：人形，行走能力（CharacterMovement）和人相似的 pawn；<br>
+2. FloatingPawnMovement、CharacterMovement、NavMovement、ProjectileMovement，<br>
+ProjectileMovement::弹道移动控制<br>
+CharacterMovement::人形移动控制，比如走路、游泳、跳跃等<br>
+3. DamageType，<br>
+伤害系统，point、range...<br>
+4. GamdeMode<br>
 游戏规则玩法，得分、计时等等
-5. GameState、PlayerState，
-GameState::游戏数据
-PlayerState::角色数据
-6. PlayerController、PlayerCameraController、AIController
-7. PlayerInput，
+5. GameState、PlayerState，<br>
+GameState::游戏数据<br>
+PlayerState::角色数据<br>
+6. PlayerController、PlayerCameraController、AIController<br>
+7. PlayerInput，<br>
 输入控制
-8. SpringArmComponent、PlayerStart，
-SpringArmComponent::弹簧臂
-PlayerStart::出生点
+8. SpringArmComponent、PlayerStart，<br>
+SpringArmComponent::弹簧臂<br>
+PlayerStart::出生点<br>
 ...
+
+![ue-game-gramework.h](/images/ue-game-gramework.png)<br>
 
 看了上面这些引擎自带的 Class，你也应该大概明白 UE Gameplay Framework 有多完善了吧。这还只是一部分。<br>
 ### 地图和关卡
