@@ -30,8 +30,9 @@ Anim Montage 实现了哪些功能呢？<br>
 
 比如 UE 的 visibility channel，太强大了，比如玻璃，或者草丛这种，玻璃是可视的，但是草丛是不可视的。<br>
 还有 UE physics asset 机制（Physics Asset Editor），可以针对头、胸、腿等设置不同的 collider type 和 physics material，以满足不一样的伤害需求，也可以满足比如载具天线刹车时细腻的物理效果表现。<br>
+Physics Asset Editor 也可以很方便的编辑 mesh 的 collider 等等，box、sphere、capsule、各种精度的凸包等等。<br>
 还有 UE 封装的更强大的 PhysX vehicle 的物理效果...
-还有 Blast 和 APEX...
+还有 PhysX 为 UE 封装的 Blast 插件等...
 
 ### 渲染
 ### Gameplay Framework
@@ -62,17 +63,41 @@ PlayerStart:出生点<br>
 看了上面这些引擎自带的 Class，你也应该大概明白 UE Gameplay Framework 有多完善了吧。这还只是一部分。<br>
 ### 地图和关卡
 ### Delicated Server
+UE 继承的服务器功能异常完善和稳定，这点是 unity 完全不能比的，虽然 unity 也推出了自家的 network，估计没人商用吧。国内的吃鸡手游就是用的 UE 的服务器。<br>
+
+1. 客户端服务器共用一套代码
+2. 服务器为游戏逻辑服务器，单个服务器为核心，多个客户端连接
+3. 服务器拥有引擎的所有功能，大地形、物理、动画、AI 等等，可以很轻松的实现所有功能
+4. 房间机制很完善，和 gameplay 完美融合
+5. 简单的标签，Replicating、RPC，就可以实现数据同步，非常容易学习
+6. 针对 charactermovement 做了非常多的网络同步优化
+7. 同步频率和优先级等可以设置，针对不同的 actor 设置不同的刷新频率
+8. 防外挂机制
+9. 简单的几步设置就可以启动服务器
+10. 所有代码都是**开源**的...等等
+
+but，因为 UE Delicated Server 确实实现了大多的功能，性能瓶颈确实存在的，需要花力气优化。<br>
+
 ### 工具链
-比如 UE ability、blueprint、非常丰富的 Profiler Debug 指令、DeviceProfileSelector、GConfig...
+
+比如 UE ability、blueprint、非常丰富的 Profiler Debug 指令、DeviceProfileSelector、GConfig...<br>
 1. UE GConfig 类似 unity 的 ScriptObject，自动序列化数据，UE 优势在统一的加载和管理（FConfigCacheIni）以及 运行时的保存机制
 2. UE ability，非常强大的技能系统
 3. UE blueprint，蓝图对策划以及动画、TA同事非常友好，快速实现效果，快速检验，蓝图的试错成本远低于 C++
-4. UE profiler debug，比如 UE stats，方便监控任意代码块的数据，比如 Stat Unit、Stat Game、Stat GPU 等等
+4. UE profiler debug，比如 UE cycle counter stat，方便监控任意代码块的数据，比如 Stat Unit、Stat Game、Stat GPU 等等，监控项目模块的性能
 5. UE device profile 和 device selector，根据不同的设备优化定制不同的效果等
-...
-### 粒子系统
+6. UE AI，behavitor tree、RVO 等
+
 ### 其他细节
-比如出生角色叠在一起怎么办，UE 自带 adjust location 算法，骨骼自带 muzzle 机制，比如弹簧臂，比如特效对象池，比如 GC，同时 UE 是开源的，这点简直太好了。
+UE 有非常非常多的技术细节，<br>
+比如 UE 自带 adjust location 算法<br>
+比如骨骼自带 muzzle 机制<br>
+比如弹簧臂<br>
+比如特效对象池<br>
+比如多线程 GC<br>
+比如多线程渲染<br>
+比如材质编辑器（ShaderForge）<br>
+再次强调，UE 是**开源**的，这点简直太好了。
 
 感谢阅读。<br>
 
