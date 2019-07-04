@@ -79,7 +79,6 @@ UE 继承的服务器功能异常完善和稳定，这点是 unity 完全不能�
 but，因为 UE Delicated Server 确实实现了大多的功能，性能瓶颈确实存在的，需要花力气优化。<br>
 
 ### 工具链
-
 比如 UE ability、blueprint、非常丰富的 Profiler Debug 指令、DeviceProfileSelector、GConfig...<br>
 1. UE GConfig 类似 unity 的 ScriptObject，自动序列化数据，UE 优势在统一的加载和管理（FConfigCacheIni）以及 运行时的保存机制
 2. UE ability，非常强大的技能系统
