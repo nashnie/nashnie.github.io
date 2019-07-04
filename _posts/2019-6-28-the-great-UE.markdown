@@ -66,8 +66,10 @@ PlayerStart:出生点<br>
 比如 UE ability、blueprint、非常丰富的 Profiler Debug 指令、DeviceProfileSelector、GConfig...
 1. UE GConfig 类似 unity 的 ScriptObject，自动序列化数据，UE 优势在统一的加载和管理（FConfigCacheIni）以及 运行时的保存机制
 2. UE ability，非常强大的技能系统
-3. UE blueprint，蓝图有多强大
+3. UE blueprint，蓝图对策划以及动画、TA同事非常友好，快速实现效果，快速检验，蓝图的试错成本远低于 C++
 4. UE profiler debug，比如 UE stats，方便监控任意代码块的数据，比如 Stat Unit、Stat Game、Stat GPU 等等
+5. UE device profile 和 device selector，根据不同的设备优化定制不同的效果等
+...
 ### 粒子系统
 ### 其他细节
 比如出生角色叠在一起怎么办，UE 自带 adjust location 算法，骨骼自带 muzzle 机制，比如弹簧臂，比如特效对象池，比如 GC，同时 UE 是开源的，这点简直太好了。
