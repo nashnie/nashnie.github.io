@@ -62,6 +62,10 @@ PlayerStart:出生点<br>
 
 看了上面这些引擎自带的 Class，你也应该大概明白 UE Gameplay Framework 有多完善了吧。这还只是一部分。<br>
 ### 地图和关卡
+1. 强大的大世界支持，以及 LOD（HLOD） 机制。
+2. 植被系统自带剔除和 LOD 机制。
+3. Layer 和 Level 机制组合，更灵活。
+
 ### Delicated Server
 UE 继承的服务器功能异常完善和稳定，这点是 unity 完全不能比的，虽然 unity 也推出了自家的 network，估计没人商用吧。国内的吃鸡手游就是用的 UE 的服务器。<br>
 
