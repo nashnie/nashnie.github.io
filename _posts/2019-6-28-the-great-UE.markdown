@@ -47,13 +47,13 @@ CharacterMovement:人形移动控制，比如走路、游泳、跳跃等<br>
 伤害系统，point、range...<br>
 4. GamdeMode<br>
 游戏规则玩法，得分、计时等等
-5. GameState、PlayerState，<br>
+5. GameState、PlayerState<br>
 GameState:游戏数据<br>
 PlayerState:角色数据<br>
 6. PlayerController、PlayerCameraController、AIController<br>
-7. PlayerInput，<br>
+7. PlayerInput<br>
 输入控制
-8. SpringArmComponent、PlayerStart，<br>
+8. SpringArmComponent、PlayerStart<br>
 SpringArmComponent:弹簧臂<br>
 PlayerStart:出生点<br>
 ...
@@ -96,6 +96,7 @@ UE 有非常非常多的技术细节，<br>
 比如多线程 GC<br>
 比如多线程渲染<br>
 比如材质编辑器（ShaderForge）<br>
+比如 pvs、soft occlusion culling<br>
 再次强调，UE 是**开源**的，这点简直太好了。
 
 感谢阅读。<br>
