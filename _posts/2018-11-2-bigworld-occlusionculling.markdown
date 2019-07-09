@@ -22,8 +22,11 @@ CPU 上传数据到 GPU 渲染，要经过剔除（过滤），有两种剔除�
 
 平接头剔除比较简单，Unity 也同时提供了剔除接口，方便大家做其他用途，比如做自己的地形草系统等等；<br>
 常规的几种遮挡剔除思路如下，<br>
-基于 CPU 的**software rasterization culling**，利用 Depth Buffer Rasterization，更准确以及可以方便多线程同时避开复杂的GPU部分，但是如果获取GPU深度图会有延迟问题，CPU 的剔除永远会延迟一帧，所以后续优化成，CPU生成深度图，物件利用AABB检测是否遮挡；<br>
-基于 GPU 的检索，这部分我也没动手去尝试，优点是GPU越来越强大，可充分利用，缺点逻辑层不方便做基于 occlusion culling 的优化，比如降低tick等…当然可以通过八叉树等来做这个优化；<br>
+基于 CPU 的 **software rasterization culling**，利用 Depth Buffer Rasterization，更准确以及可以方便多线程同时避开复杂的GPU部分，但是如果获取GPU深度图会有延迟问题，CPU 的剔除永远会延迟一帧，所以后续优化成，CPU生成深度图，物件利用AABB检测是否遮挡；<br>
+1. Depth Buffer Rasterization
+2. Depth Test Culling，使用轴对齐边界框（AABB）来针对 CPU 生成的深度缓冲区测试场景中的遮挡。
+
+基于 GPU 的检索，这部分我也没动手去尝试，优点是 GPU 越来越强大，可充分利用，缺点逻辑层不方便做基于 occlusion culling 的优化，比如降低tick等…当然可以通过八叉树等来做这个优化；<br>
 为什么不用 Unity 原生的 occlusion culling？<br>
 它占用太多的磁盘空间和内存，因为 Unity Umbra 在构建期间烘焙遮挡数据，Unity 需要在加载场景时将其从磁盘加载到 RAM。不支持动态加载、内存占用高、无法关闭动态物件 Culling，同时还有 CPU 消耗…这种方案不太适合对内存和包体要求较高的大地形方案，比如几公里*几公里的地图。
 如何解决呢？<br>
