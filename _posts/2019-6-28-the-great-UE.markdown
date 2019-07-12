@@ -65,6 +65,7 @@ PlayerStart:出生点<br>
 1. 强大的大世界支持，以及 LOD（HLOD） 机制。
 2. 植被系统自带剔除和 LOD 机制。
 3. Layer 和 Level 机制组合，更灵活。
+4. Worldc Composer。
 
 ### Delicated Server
 UE 继承的服务器功能异常完善和稳定，这点是 unity 完全不能比的，虽然 unity 也推出了自家的 network，估计没人商用吧。国内的吃鸡手游就是用的 UE 的服务器。<br>
@@ -86,7 +87,7 @@ but，因为 UE Delicated Server 确实实现了大多的功能，性能瓶颈�
 比如 UE ability、blueprint、非常丰富的 Profiler Debug 指令、DeviceProfileSelector、GConfig...<br>
 1. UE GConfig 类似 unity 的 ScriptObject，自动序列化数据，UE 优势在统一的加载和管理（FConfigCacheIni）以及 运行时的保存机制
 2. UE ability，非常强大的技能系统
-3. UE blueprint，蓝图对策划以及动画、TA同事非常友好，快速实现效果，快速检验，蓝图的试错成本远低于 C++
+3. UE blueprint，蓝图对策划以及动画、TA 同事非常友好，快速实现效果，快速检验，蓝图的试错成本远低于 C++
 4. UE profiler debug，比如 UE cycle counter stat，方便监控任意代码块的数据，比如 Stat Unit、Stat Game、Stat GPU 等等，监控项目模块的性能
 5. UE device profile 和 device selector，根据不同的设备优化定制不同的效果等
 6. UE AI，behavitor tree、RVO 等
@@ -101,7 +102,8 @@ UE 有非常非常多的技术细节，<br>
 比如多线程渲染<br>
 比如材质编辑器（ShaderForge）<br>
 比如 pvs、soft occlusion culling<br>
-再次强调，UE 是**开源**的，这点简直太好了。
+再比如可以很方便的设置 Tick 的频率、执行依赖、执行顺序等等<br>
+最后，UE 是**开源**的，这点简直太好了。
 
 感谢阅读。<br>
 
