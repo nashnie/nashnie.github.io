@@ -96,6 +96,7 @@ Vertex program 的输出是 Fragment program 的输入。<br>
 ![](/images/graphics-principle2.png)<br>
 
 ## 光照模型以及 PBR 
+### 光照模型
 **漫反射<br>**
 
 粗糙的物体表面向各个方向等强度地反射光，这种等同地向各个方向散射的现象称为光的漫反射（diffuse reflection）。<br>
@@ -132,10 +133,10 @@ ambient = Ka x globalAmbient<br>
 1. Ka is the material's ambient reflectance and
 2. globalAmbient is the color of the incoming ambient light.
 
-**Final Color<br>**
+**最终像素<br>**
 
 surfaceColor = emissive + ambient + diffuse + specular<br>
-基于上面的算法，我写了个测试 Shader，通过 Shader Toggle 切换显示 Final Surface Color各个组成部分。<br>
+基于上面的算法，我写了个测试 Shader，通过 Shader Toggle 切换显示 Final Surface Color 各个组成部分。<br>
 
 {% highlight CG %}
 fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
