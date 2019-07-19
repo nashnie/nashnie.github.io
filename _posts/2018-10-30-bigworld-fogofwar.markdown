@@ -51,7 +51,7 @@ fixed4 fragDownsample (v2f_tap i) : SV_Target
 }
 {% endhighlight %}
 ### 4，迷雾 Shader
-根据像素worldPos以及地图宽高、地图起点，计算出UV坐标；<br>
+根据像素 worldPos 以及地图宽高、地图起点，计算出 UV 坐标；<br>
 根据上面的迷雾Texture计算出迷雾的比例，0就是没有迷雾，1就是被迷雾覆盖，0.5是覆盖一半；<br>
 最后根据计算比例插值算出迷雾颜色就好了。迷雾叠加在片段着色器最后计算得出的颜色值上。<br>
 
