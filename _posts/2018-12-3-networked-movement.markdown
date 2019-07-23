@@ -143,7 +143,7 @@ Pos4 = Pos3 + [ Vnew + ( 1 /2) ×anew ×t. ] ;
 客户端收到预测结果，0:CaughtUp,1:Reject，分别处理不同的行为。<br>
 
 <br>
-我们分三种类型的行为来分别讨论。<br>
+我们分三种类型的行为来讨论。<br>
 1. **特效预测**<br>
 + CaughtUp
 + Reject，动画 Montage 等立即 Stop；
