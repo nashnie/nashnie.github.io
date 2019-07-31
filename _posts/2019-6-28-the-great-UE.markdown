@@ -79,7 +79,9 @@ UE 继承的服务器功能异常完善和稳定，这点是 unity 完全不能�
 7. 同步频率和优先级等可以设置，针对不同的 actor 设置不同的刷新频率
 8. 防外挂机制
 9. 简单的几步设置就可以启动服务器
-10. 所有代码都是**开源**的...等等
+10. 针对大规模 Actor 的同步优化，也就是 RepGraph，通过把 World 切分成 Grid，把 Actor 分组，利用 Distance、Starvation、GamdeCode 比如 ForceUpdateNet 等等计算 AccumulatedPriority
+11. float、vector 的压缩算法以及增量同步等，优化带宽 
+12. 所有代码都是**开源**的...等等
 
 but，因为 UE Delicated Server 确实实现了大多的功能，性能瓶颈确实存在的，需要花力气优化。<br>
 
