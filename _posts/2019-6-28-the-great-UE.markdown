@@ -23,8 +23,8 @@ Anim Montage 实现了哪些功能呢？<br>
 还有 Animation Sharing、Master Skeleton 等等...<br>
 
 ### 物理
-使用下来我个人认为 UE 对 PhysX 的封装更易用更强大一些。
-比如 physics response 的设置，UE 使用了 Preset，Unity 的类似二维数组设置。
+使用下来我个人认为 UE 对 PhysX 的封装更易用更强大一些。<br>
+比如 physics response 的设置，UE 使用了 Preset 编辑同一类资源的 Overlap、Block 设定，而 Unity 的类似二维数组设置。<br>
 1. 新加一个 channel 设置默认 block，overlap 或者 ignore，preset 直接使用，不需要持续维护，<br>
 2. 同时同类型（ObjectType）的物件可以使用不同的 preset，满足不同的需求。<br>
 
@@ -35,6 +35,9 @@ Physics Asset Editor 也可以很方便的编辑 mesh 的 collider 等等，box�
 还有 PhysX 为 UE 封装的 Blast 插件等...
 
 ### 渲染
+1. 材质编辑器；
+2. 强大的预览工具；
+
 ### Gameplay Framework
 1. Actor、DefaultPawn、Pawn、Character，<br>
 Actor:场景中所有对象，类似 Unity gameobject；<br>
@@ -62,26 +65,27 @@ PlayerStart:出生点<br>
 
 看了上面这些引擎自带的 Class，你也应该大概明白 UE Gameplay Framework 有多完善了吧。这还只是一部分。<br>
 ### 地图和关卡
-1. 强大的大世界支持，以及 LOD（HLOD） 机制。
-2. 植被系统自带剔除和 LOD 机制。
-3. Layer 和 Level 机制组合，更灵活。
-4. Worldc Composer。
+1. 强大的大世界支持，以及 LOD（HLOD） 机制；
+2. 程序化生成的植被系统，高斯分布、区域划分、QuadTree、成长系统以及等等，当然还有 Foliage Instance...，同时植被系统自带剔除和 LOD 机制；
+3. Layer 和 Level 机制组合，更灵活；
+4. World composition，根据距离加载的 Layer 和 Level，满足同一块区域不同细节的 LOD 需求；
 
 ### Delicated Server
 UE 继承的服务器功能异常完善和稳定，这点是 unity 完全不能比的，虽然 unity 也推出了自家的 network，估计没人商用吧。国内的吃鸡手游就是用的 UE 的服务器。<br>
 
-1. 客户端服务器共用一套代码
-2. 服务器为游戏逻辑服务器，单个服务器为核心，多个客户端连接
-3. 服务器拥有引擎的所有功能，大地形、物理、动画、AI 等等，可以很轻松的实现所有功能
-4. 房间机制很完善，和 gameplay 完美融合
-5. 简单的标签，Replicating、RPC，就可以实现数据同步，非常容易学习
-6. 针对 charactermovement 做了非常多的网络同步优化
-7. 同步频率和优先级等可以设置，针对不同的 actor 设置不同的刷新频率
-8. 防外挂机制
-9. 简单的几步设置就可以启动服务器
-10. 针对大规模 Actor 的同步优化，也就是 RepGraph，通过把 World 切分成 Grid，把 Actor 分组，利用 Distance、Starvation、GamdeCode 比如 ForceUpdateNet 等等计算 AccumulatedPriority
-11. float、vector 的压缩算法以及增量同步等，优化带宽 
-12. 所有代码都是**开源**的...等等
+1. 客户端服务器共用一套代码；
+2. 服务器为游戏逻辑服务器，单个服务器为核心，多个客户端连接；
+3. 服务器拥有引擎的所有功能，大地形、物理、动画、AI 等等，可以很轻松的实现所有功能；
+4. 房间机制很完善，和 gameplay 完美融合；
+5. 简单的标签，Replicating、RPC，就可以实现数据同步，非常容易学习；
+6. 针对 charactermovement 做了非常多的网络同步优化；
+7. 同步频率和优先级等可以设置，针对不同的 actor 设置不同的刷新频率；
+8. 防外挂机制；
+9. 简单的几步设置就可以启动服务器；
+10. 针对大规模 Actor 的同步优化，也就是 RepGraph，通过把 World 切分成 Grid，把 Actor 分组，利用 Distance、Starvation、GamdeCode 比如 ForceUpdateNet 等等计算 AccumulatedPriority；
+11. float、vector 的压缩算法以及增量同步等，优化带宽；
+12. RepGraph，满足各种各样的的 AOI 需求，比如每个 Actor 不同的 NetCullingDistance等，以及 AOI Grids 增量更新等；
+13. 所有代码都是**开源**的...等等；
 
 but，因为 UE Delicated Server 确实实现了大多的功能，性能瓶颈确实存在的，需要花力气优化。<br>
 
