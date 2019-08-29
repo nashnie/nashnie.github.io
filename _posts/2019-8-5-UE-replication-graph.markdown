@@ -48,7 +48,7 @@ AddActor_Static\AddActor_Dynamic\AddActor_Dormancy\RemoveActor_Static…
 根据每一个 actor 的 cullingdistance 设置 actor 自身辐射的格子范围，然后当 viewtarget 进入辐射的格子内时，就可以获取辐射到格子的所有 Actor；
 UE针对DynamicActor做了个很精妙的优化，在同步之前（GatherActorList）的 PrepareForReplication 阶段，处理 DynamicActor 辐射的 格子变化，首先判断Actor前后变化的Rect是否相交，AABB 算法，如果完全不相交，那么全部更新 Rect 代表的格子，不过相交的话，复杂一点，判断相交的格子，增量更新；<br>
 简单说下矩形的检测算法，水平方向上如果矩形1的右端比矩形2的左端还靠左或者矩形1的左端比矩形2还靠右，那么两个矩形是不可能重叠的，反之则是重叠的。<br>
-垂直方向上的检测一样。重叠之后，我们判断重叠的区域部分，移除多余的格子里的 Actor，增加新增的覆盖格子，部分代码在下面。<br>
+垂直方向上的检测一样。重叠之后，我们判断重叠的区域部分，移除多余的格子里的 Actor，把 Actor 添加到新增的格子列表里，我们根据 PreviousCellInfo 和 NewCellInfo 的 StartX、StartY、EndX、EndY 分四种情况，我们其中一种情况的代码在下面。<br>
 
 8. UReplicationGraphNode_AlwaysRelevant
 9. UReplicationGraphNode_AlwaysRelevant_ForConnection.针对单个 Connection 处理，比如 PlayerController，判断当前的 PC 是否在 ActorList，添加 PC 进 ActorList，然后设置 cullingdistance 等于0，强制忽略距离因素。
