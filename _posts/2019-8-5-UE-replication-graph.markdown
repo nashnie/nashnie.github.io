@@ -6,7 +6,7 @@ categories: none
 ---
 ## 浅析 UE ReplicationGraph
 
-### 底层实现原理和流程
+### 底层实现原理
 
 UE dedicated server 同步的代码还是很清晰的，NetDriver、NetSerialization 等等，看起来赏心悦目尤其是 ReplicationGraph，学到了一些思路。<br>
 首先是建立连接，server 和 client 三次握手（handshakes）之后，一个 Client 对应一个 Connection，NetDriver 负责创建对应平台类型的 Socket 以及数据的收发 TickFlush 和 TickDispatcher。<br>
