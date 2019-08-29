@@ -50,8 +50,8 @@ AddActor_Static\AddActor_Dynamic\AddActor_Dormancy\RemoveActor_Static…
 UE针对DynamicActor做了个很精妙的优化，在同步之前（GatherActorList）的 PrepareForReplication 阶段，处理 DynamicActor 辐射的 格子变化，首先判断Actor前后变化的Rect是否相交，AABB 算法，如果完全不相交，那么全部更新 Rect 代表的格子，不过相交的话，复杂一点，判断相交的格子，增量更新；<br>
 简单说下矩形的检测算法，水平方向上如果矩形1的右端比矩形2的左端还靠左或者矩形1的左端比矩形2还靠右，那么两个矩形是不可能重叠的，反之则是重叠的。<br>
 垂直方向上的检测一样。重叠之后，我们判断重叠的区域部分，移除多余的格子里的 Actor，把 Actor 添加到新增的格子列表里，我们根据 PreviousCellInfo 和 NewCellInfo 的 StartX、StartY、EndX、EndY 分四种情况，我们其中一种情况的代码在下面。<br>
-
 8. UReplicationGraphNode_AlwaysRelevant
+这个类处理需要同步给所有 Connection 的 Actor，需要注意的点就是如何过滤出这种类型的 Actor，一个入门是在我们后面会提到的EClassRepNodeMapping里设置，另一个入口是在该Node里添加动态入口，满足我们一些特殊需求。
 9. UReplicationGraphNode_AlwaysRelevant_ForConnection.针对单个 Connection 处理，比如 PlayerController，判断当前的 PC 是否在 ActorList，添加 PC 进 ActorList，然后设置 cullingdistance 等于0，强制忽略距离因素。
 10. UReplicationGraphNode_TearOff_ForConnection
 
@@ -93,11 +93,12 @@ else if(PreviousCellInfo.StartX > NewCellInfo.StartX)
 设置 Uclass 类型的 FClassReplicationInfo，比如 DistanceScale、StarvationScale、CullDistance等。因为 UClass 类型对象很多，我们不可能针对每一个类型设置每一种。我们的做法是设置通用、常规的几种，比如 APawn、APlayerState 等，其他的遍历所有的 Uclass，统一设置； 
 
 #### FConnectionReplicationActorInfo
+设置 Uclass 类型的 FClassReplicationInfo，区别是这个设置是针对 Connection 的，不同的 Connection 可以不一样。
 
 #### EClassRepNodeMapping	
 同样的，我们要设置每一种 UClass 的 EClassRepNodeMapping，也就是 Actor 归属的 Node 类型，根据这个 ClassRepNodeMapping 我们才能在 Actor 添加的时候判断把 Actor 放进那个 GraphNode。
 
-#### 基本同步流程
-ReplicateSingleActor->CallPreReplication->SetChannelActor、ActorInfo.Channel->ReplicateActor、PostReplicateActor->Loop Dependent actors。<br>
+#### SingleActor 基本同步流程
+ReplicateSingleActor->CallPreReplication->SetChannelActor、ActorInfo.Channel->ReplicateActor、PostReplicateActor->Loop Dependent actors<br>
 	
 
