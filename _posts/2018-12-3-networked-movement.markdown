@@ -138,8 +138,8 @@ Pos4 = Pos3 + [ Vnew + ( 1 /2) ×anew ×t. ] ;
 + Dependencies，如何处理预测行为之间的依赖关系；
 + Override，根据服务器数据覆盖本地预测状态等；
 3. 如何解决？
-我们使用 预测密钥（Prediction Key）。预测密钥是有 Local 生成，和 gameplay 的行为一起发送给服务器，服务器完成校验后，发送校验结果（失败或者成功）以及 Prediction Key 给客户端。<br>
-服务器只需要把带 Key 的结果返回给上传 Key 的服务器即可，其他的客户端不需要这个 Key。<br>
+我们使用预测密钥（Prediction Key）方案，类似原子操作，我们记录下所有的操作行为，使用 Prediction Key 绑定。预测密钥 Local 生成之后，和 gameplay 的行为一起发送给服务器，服务器完成校验后，发送校验结果（失败或者成功）以及 Prediction Key 给客户端。<br>
+服务器只需要把带 Prediction Key 的原子操作结果返回给上传 Prediction Key 的客户端即可，其他的客户端不需要这个 Prediction Key。<br>
 客户端收到预测结果，0:CaughtUp,1:Reject，分别处理不同的行为。<br>
 
 <br>
