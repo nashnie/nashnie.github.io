@@ -13,15 +13,23 @@ ECS 和其他一些 MVC 框架的区别，我觉得最重要的一点是数据�
 >Entity–component–system (ECS) is an architectural pattern that is mostly used in game development. 
 >ECS follows the composition over inheritance principle that allows greater flexibility in defining entities where every object in a game's scene is an entity (e.g. enemies, bullets, vehicles, etc.).
 
+ECS 基本实现框架不算复杂，Context 负责管理维护所有的 Entity 的生命周期，创建、添加、销毁等等，可以同时存在多个 Context，比如 InputContext、LogicContext，各种维护自己的数据。<br>
+当然最上层有个全局的类复杂管理各个 Context。<br>
+Context 下面就是 Entity，负责管理维护 DataComponent的生命周期，提供各种各样的接口，比如创建、添加、回收...然后就是 DataComponent，就是一个结构体，数据变化有事件发送。<br>
+ECS 的优势之一就是各种各种的 Group，Group 如何实现的呢？Group 依赖 Matcher 机制来过滤，缓存符合条件的 Entity 的 List。<br>
+Matcher 提供了几种规则供 Group 调用，allOfIndices、anyOfIndices、noneOfIndices，来判断这三个集合是否条件。<br>
+最后就是 System，这个也很简洁，IInitiaizeSystem、IExecuteSystem、ICleanupSystem、ITearDownSystem，一个逻辑可能需要执行的四个阶段，分别注册到四个List里，然后在 MainGame 里驱动 SystemList。<br>
+
+
 从守望先锋分享之后，我开始研究ECS，并在后续我们新项目搭建了基于 Entity-Component-System 的底层。<br>
-ECS优势，<br>
+#### ECS优势，<br>
 1. 面向 Component(Data) 编程，数据驱动；
 2. System 和 View 分离，方便多线程；
 3. 方便移植；
 4. 很好用、效率的底层接口比如各种 Group；（我们使用Entitas这个开源第三方的插件）
 5. 更方便的 Debug；
 
-劣势嘛，<br>
+#### 劣势嘛，<br>
 1. 框架的学习成本；
 2. 不能乱写带来的临时效率降低；
 3. 还有，我想不到了…
@@ -33,7 +41,8 @@ ECS优势，<br>
 3. 还有一点，Unity ECS Data 部分是基于结构体的，这个性能很好，内存连续读取更效率；<br>
 4. 另外一些小优化，Unity 接口封装的很多。但是因为改动实在太大，有些功能还没有完成，可惜；<br>
 
-### 心得
+<br>
+<br>
 
 设计我们项目的框架，难点在如何和 ECS 完美结合。<br>
 **services-logic-data-view**<br>
