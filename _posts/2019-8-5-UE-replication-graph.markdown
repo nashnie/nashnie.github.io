@@ -38,8 +38,9 @@ UReplicationGraphNode\NotifyRemoveNetworkActor\GatherActorListsForConnection<br>
 2. UReplicationGraphNode_ActorListFrequencyBuckets，
 这个类主要处理在 Non StreamingLevel 时大规模 Actors 的负载均衡（load balance），实现思路也很清晰简单，根据所有 Actors 的数量，分了几组 Buckets，每组设置 Actor 的上限，然后把所有的 Actors 随机分配到各个等待同步 ActorList 里。<br>
 动态添加和删除 Actor 时调整 Buckets 数量，然后在 Replicator 的时候根据当前帧数依次选择一组 Buckets 进行同步，不在当前帧的 Buckets，可以旋转是否使用 FastShared 进行同步，也就是使用 NetCache 缓存的Bytes（Bunch）。<br>
-3. UReplicationGraphNode_DynamicSpatialFrequency.
-A node intended for dynamic (moving) actors where replication frequency is based on distance to the connection's view location.
+3. UReplicationGraphNode_DynamicSpatialFrequency
+这个 GraphNode 和 ActorListFrequencyBuckets 很像，尽量保证同步效果的时候，降低需要同步的 Actor 数量，达到优化同步性能的目的。利用 Connection view location 计算距离裁切，然后在根据点积计算 Actor 和 Connection view target 的夹角。
+根据夹角和距离在预测设置好的Buckets（Zones）里计算同步周期。
 4. UReplicationGraphNode_ConnectionDormanyNode
 5. UReplicationGraphNode_DormancyNode
 6. UReplicationGraphNode_GridCell
