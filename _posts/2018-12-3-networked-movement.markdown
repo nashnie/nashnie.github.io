@@ -140,8 +140,10 @@ Pos4 = Pos3 + [ Vnew + ( 1 /2) ×anew ×t. ] ;
 3. 如何解决？
 我们使用预测密钥（Prediction Key）方案，类似原子操作，我们记录下所有的操作行为，使用 Prediction Key 绑定。预测密钥 Local 生成之后，和 gameplay 的行为一起发送给服务器，服务器完成校验后，发送校验结果（失败或者成功）以及 Prediction Key 给客户端。<br>
 服务器只需要把带 Prediction Key 的原子操作结果返回给上传 Prediction Key 的客户端即可，其他的客户端不需要这个 Prediction Key。<br>
-客户端收到预测结果，0:CaughtUp,1:Reject，分别处理不同的行为。<br>
-
+客户端收到预测结果，0:CaughtUp，1:Reject，分别处理不同的行为。<br>
+需要特殊说明的是，属性相关的预测比较复杂，因为他们是无状态的，回滚一个属性变化比较复杂，如果没有 Map 保存所有改变的值改变历史。<br>
+我们解决办法是预测属性的相对变化而不是绝对值，比如血量100到90我们预测是-10操作。<br>
+	
 <br>
 我们分三种类型的行为来讨论。<br>
 1. **特效预测**<br>
@@ -154,7 +156,7 @@ Pos4 = Pos3 + [ Vnew + ( 1 /2) ×anew ×t. ] ;
 
 3. **属性预测**<br>
 + CaughtUp
-+ Reject
++ Reject，使用 Server 发送的 Base Value、Delta Value；
 
 ### 还有哪些潜在的问题？
 
