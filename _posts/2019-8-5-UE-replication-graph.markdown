@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "UE ReplicationGraph 原理分析"
+title:  "详解 UE ReplicationGraph 方案"
 date:   2019-8-5 10:00:00 +0800
 categories: none
 ---
-## 浅析 UE ReplicationGraph
+## 详解 UE ReplicationGraph 方案
 
 ### 底层同步浅析
 
