@@ -98,8 +98,134 @@ else if(PreviousCellInfo.StartX > NewCellInfo.StartX)
 #### EClassRepNodeMapping	
 同样的，我们要设置每一种 UClass 的 EClassRepNodeMapping，也就是 Actor 归属的 Node 类型，根据这个 ClassRepNodeMapping 我们才能在 Actor 添加的时候判断把 Actor 放进那个 GraphNode。
 
-#### SingleActor 基本同步流程
-ReplicateSingleActor->CallPreReplication->SetChannelActor、ActorInfo.Channel->ReplicateActor、PostReplicateActor->Loop Dependent actors<br>
+#### SingleActor 同步流程
+ReplicateSingleActor 入口函数，执行 Actor 内部的 CallPreReplication，创建或者获取 ActorChannel，执行 Channel ReplicateActor，然后执行 Actor 内部的 PostReplicateActor，最后同步所有依赖该 Actor 的 Actor List。<br>
+细节代码如下<br>
 
+{% highlight c++ %}
+int64 UReplicationGraph::ReplicateSingleActor(AActor* Actor, FConnectionReplicationActorInfo& ActorInfo, FGlobalActorReplicationInfo& GlobalActorInfo, FPerConnectionActorInfoMap& ConnectionActorInfoMap, UNetConnection* NetConnection, const uint32 FrameNum)
+{
+	RG_QUICK_SCOPE_CYCLE_COUNTER(NET_ReplicateActors_ReplicateSingleActor);
+
+	if (RepGraphConditionalActorBreakpoint(Actor, NetConnection))
+	{
+		UE_LOG(LogReplicationGraph, Display, TEXT("UReplicationGraph::ReplicateSingleActor: %s. NetConnection: %s"), *Actor->GetName(), *NetConnection->Describe());
+	}
+
+	if (ActorInfo.Channel && ActorInfo.Channel->Closing)
+	{
+		// We are waiting for the client to ack this actor channel's close bunch.
+		return 0;
+	}
+
+	ActorInfo.LastRepFrameNum = FrameNum;
+	ActorInfo.NextReplicationFrameNum = FrameNum + ActorInfo.ReplicationPeriodFrame;
+
+	UClass* const ActorClass = Actor->GetClass();
+
+	/** Call PreReplication if necessary. */
+	if (GlobalActorInfo.LastPreReplicationFrame != FrameNum)
+	{
+		RG_QUICK_SCOPE_CYCLE_COUNTER(NET_ReplicateActors_CallPreReplication);
+		GlobalActorInfo.LastPreReplicationFrame = FrameNum;
+
+		Actor->CallPreReplication(NetDriver);
+	}
+
+	const bool bWantsToGoDormant = GlobalActorInfo.bWantsToBeDormant;
+	TActorRepListViewBase<FActorRepList*> DependentActorList(GlobalActorInfo.DependentActorList.RepList.GetReference());
+
+	if (ActorInfo.Channel == nullptr)
+	{
+		// Create a new channel for this actor.
+		INC_DWORD_STAT_BY( STAT_NetActorChannelsOpened, 1 );
+		ActorInfo.Channel = (UActorChannel*)NetConnection->CreateChannelByName( NAME_Actor, EChannelCreateFlags::OpenedLocally );
+		if ( !ActorInfo.Channel )
+		{
+			return 0;
+		}
+
+		CSVTracker.PostActorChannelCreated(ActorClass);
+
+		//UE_LOG(LogReplicationGraph, Display, TEXT("Created Actor Channel:0x%x 0x%X0x%X, %d"), ActorInfo.Channel, Actor, NetConnection, FrameNum);
+					
+		// This will unfortunately cause a callback to this  UNetReplicationGraphConnection and will relook up the ActorInfoMap and set the channel that we already have set.
+		// This is currently unavoidable because channels are created from different code paths (some outside of this loop)
+		ActorInfo.Channel->SetChannelActor( Actor );
+	}
+
+	if (UNLIKELY(bWantsToGoDormant))
+	{
+		ActorInfo.Channel->StartBecomingDormant();
+	}
+
+	int64 BitsWritten = 0;
+	const double StartingReplicateActorTimeSeconds = GReplicateActorTimeSeconds;
+					
+	if (UNLIKELY(ActorInfo.bTearOff))
+	{
+		// Replicate and immediately close in tear off case
+		BitsWritten = ActorInfo.Channel->ReplicateActor();
+		BitsWritten += ActorInfo.Channel->Close(EChannelCloseReason::TearOff);
+	}
+	else
+	{
+		// Just replicate normally
+		BitsWritten = ActorInfo.Channel->ReplicateActor();
+	}
+
+	const double DeltaReplicateActorTimeSeconds = GReplicateActorTimeSeconds - StartingReplicateActorTimeSeconds;
+
+	if (bTrackClassReplication)
+	{
+		if (BitsWritten > 0)
+		{
+			ChangeClassAccumulator.Increment(ActorClass);
+		}
+		else
+		{
+			NoChangeClassAccumulator.Increment(ActorClass);
+		}
+	}
+
+	CSVTracker.PostReplicateActor(ActorClass, DeltaReplicateActorTimeSeconds, BitsWritten);
+
+	// ----------------------------
+	//	Dependent actors
+	// ----------------------------
+	if (DependentActorList.IsValid())
+	{
+		RG_QUICK_SCOPE_CYCLE_COUNTER(NET_ReplicateActors_DependentActors);
+
+		const int32 CloseFrameNum = ActorInfo.ActorChannelCloseFrameNum;
+
+		for (AActor* DependentActor : DependentActorList)
+		{
+			repCheck(DependentActor);
+
+			FConnectionReplicationActorInfo& DependentActorConnectionInfo = ConnectionActorInfoMap.FindOrAdd(DependentActor);
+			FGlobalActorReplicationInfo& DependentActorGlobalData = GlobalActorReplicationInfoMap.Get(DependentActor);
+
+			UpdateActorChannelCloseFrameNum(DependentActor, DependentActorConnectionInfo, DependentActorGlobalData, FrameNum, NetConnection);
+
+			// Dependent actor channel will stay open as long as the owning actor channel is open
+			DependentActorConnectionInfo.ActorChannelCloseFrameNum = FMath::Max<uint32>(CloseFrameNum, DependentActorConnectionInfo.ActorChannelCloseFrameNum);
+
+			if (!ReadyForNextReplication(DependentActorConnectionInfo, DependentActorGlobalData, FrameNum))
+			{
+				continue;
+			}
+
+			//UE_LOG(LogReplicationGraph, Display, TEXT("DependentActor %s %s. NextReplicationFrameNum: %d. FrameNum: %d. ForceNetUpdateFrame: %d. LastRepFrameNum: %d."), *DependentActor->GetPathName(), *NetConnection->GetName(), DependentActorConnectionInfo.NextReplicationFrameNum, FrameNum, DependentActorGlobalData.ForceNetUpdateFrame, DependentActorConnectionInfo.LastRepFrameNum);
+			BitsWritten += ReplicateSingleActor(DependentActor, DependentActorConnectionInfo, DependentActorGlobalData, ConnectionActorInfoMap, NetConnection, FrameNum);
+		}					
+	}
+
+	return BitsWritten;
+}
+{% endhighlight %}
+
+###
+ReplicationGraph 旨在解决大规模 Actors 同步时服务器 CPU 性能压力以及流量压力，ReplicationGraph 作为 UE 的插件，设计思路特别清晰，代码非常清晰易懂，比如 增量 Grid 、角色 FOV 视野、负载平衡等等，还可以很方便的定制项目里的各种自定义 Group 需求，强烈推荐使用。 
 	
 
