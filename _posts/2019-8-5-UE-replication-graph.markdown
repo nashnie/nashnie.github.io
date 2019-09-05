@@ -100,6 +100,7 @@ else if(PreviousCellInfo.StartX > NewCellInfo.StartX)
 
 #### SingleActor 同步流程
 ReplicateSingleActor 入口函数，执行 Actor 内部的 CallPreReplication，创建或者获取 ActorChannel，执行 Channel ReplicateActor，然后执行 Actor 内部的 PostReplicateActor，最后同步所有依赖该 Actor 的 Actor List。<br>
+<br>
 细节代码如下<br>
 
 {% highlight c++ %}
