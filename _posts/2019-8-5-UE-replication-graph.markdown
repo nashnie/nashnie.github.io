@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "浅析 UE ReplicationGraph"
+title:  "UE ReplicationGraph 原理分析"
 date:   2019-8-5 10:00:00 +0800
 categories: none
 ---
@@ -225,7 +225,7 @@ int64 UReplicationGraph::ReplicateSingleActor(AActor* Actor, FConnectionReplicat
 }
 {% endhighlight %}
 
-###
+### 总结
 ReplicationGraph 旨在解决大规模 Actors 同步时服务器 CPU 性能压力以及流量压力，ReplicationGraph 作为 UE 的插件，设计思路特别清晰，代码非常清晰易懂，比如 增量 Grid 、角色 FOV 视野、负载平衡等等，还可以很方便的定制项目里的各种自定义 Group 需求，强烈推荐使用。 
 	
 
