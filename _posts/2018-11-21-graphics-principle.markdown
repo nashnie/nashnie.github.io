@@ -15,19 +15,20 @@ Application -> Command -> Geometry -> Rasterization -> Fragment -> Display<br>
 下面我用伪代码大概写一下渲染管线需要做那些处理，方便理解。<br>
 
 {% highlight CG %}
-InitializeCamera<br>
-ClearZbuffer<br>
-SetLightAndFog<br>
-FilterVisibleGeometrys(Camera Frustum and PVS or Software Culling or Hardware Culling)<br>
-foreach VisibleGeometry  : FilterVisibleGeometrys<br>
-	foreach Triangle : VisibleGeometry.Mesh<br>
-		Vertex Light<br>
-		Triangle Transform (Object Space > Camera Cullling Space > Screen Space)<br>
-		Face Culling<br>
-		Triangle Rasterization<br>
-		foreach Pixel : Triangle<br>
-			if (ZTest & AlphaTest)<br>
-				Render Pixel<br>
+InitializeCamera
+ClearZbuffer
+SetLightAndFog
+FilterVisibleGeometrys(Camera Frustum and PVS or Software Culling or Hardware Culling)
+foreach VisibleGeometry  : FilterVisibleGeometrys
+	foreach Triangle : VisibleGeometry.Mesh
+		Transform Triangle To View Cullling Space
+		Vertex Light
+		Face Culling
+		Transform Triangle To Screen Space
+		Triangle Rasterization
+		foreach Pixel : Triangle
+			if (ZTest & AlphaTest)
+				Render Pixel
 {% endhighlight %}
 				
 <br>
