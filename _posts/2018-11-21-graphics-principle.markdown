@@ -18,7 +18,7 @@ Application -> Command -> Geometry -> Rasterization -> Fragment -> Display<br>
 InitializeCamera<br>
 ClearZbuffer<br>
 SetLightAndFog<br>
-FilterVisibleGeometry s(Camera Frustum and PVS or Software Culling or Hardware Culling)<br>
+FilterVisibleGeometrys(Camera Frustum and PVS or Software Culling or Hardware Culling)<br>
 foreach VisibleGeometry  : FilterVisibleGeometrys<br>
 	foreach Triangle : VisibleGeometry.Mesh<br>
 		Vertex Light<br>
