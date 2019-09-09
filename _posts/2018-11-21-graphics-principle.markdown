@@ -29,6 +29,7 @@ foreach VisibleGeometry  : FilterVisibleGeometrys
 		foreach Pixel : Triangle
 			if (ZTest & AlphaTest)
 				Render Pixel
+				Write Pixel
 {% endhighlight %}
 				
 <br>
