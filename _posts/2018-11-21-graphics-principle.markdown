@@ -1,17 +1,34 @@
 ---
 layout: post
-title:  "graphics-principle & PBR"
+title:  "Graphics-principle & PBR"
 date:   2018-11-21 10:00:00 +0800
 categories: engine
 ---
-### graphics-principle & PBR
+### Graphics-principle & PBR
 
 ## 渲染是什么
 渲染是一个 CPU 驱动引擎，引擎驱动 OpenGL，OpenGL 驱动 GPU 修改显存的过程。<br>
-VRAM（显存）包括图像缓冲区、深度缓冲、顶点缓冲区、纹理图。<br>
+VRAM（显存）包括图像缓冲区、深度缓冲、顶点缓冲区、纹理图，显存大小经常决定了渲染的效率。<br>
 
+这是渲染的基础驱动流程，<br>
 Application -> Command -> Geometry -> Rasterization -> Fragment -> Display<br>
+下面我用伪代码大概写一下渲染管线需要做那些处理，方便理解。<br>
 
+InitializeCamera<br>
+ClearZbuffer<br>
+SetLightAndFog<br>
+FilterVisibleObjects(Camera Frustum and PVS or Software Culling or Hardware Culling)<br>
+foreach VisibleObject : FilterVisibleObjects<br>
+	foreach Triangle : VisibleObject.Mesh<br>
+		Vertex Light<br>
+		Triangle Transform (Object Space > Camera Cullling Space > Screen Space)<br>
+		Face Culling<br>
+		Triangle Rasterization<br>
+		foreach Pixel : Triangle<br>
+			if (ZTest & AlphaTest)<br>
+				Render Pixel<br>
+				
+<br>
 ## 渲染管线详解
 
 1. 描述了3D模型的几何数据结构;
