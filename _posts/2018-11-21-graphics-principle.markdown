@@ -14,12 +14,13 @@ VRAM（显存）包括图像缓冲区、深度缓冲、顶点缓冲区、纹理�
 Application -> Command -> Geometry -> Rasterization -> Fragment -> Display<br>
 下面我用伪代码大概写一下渲染管线需要做那些处理，方便理解。<br>
 
+{% highlight CG %}
 InitializeCamera<br>
 ClearZbuffer<br>
 SetLightAndFog<br>
-FilterVisibleObjects(Camera Frustum and PVS or Software Culling or Hardware Culling)<br>
-foreach VisibleObject : FilterVisibleObjects<br>
-	foreach Triangle : VisibleObject.Mesh<br>
+FilterVisibleGeometry s(Camera Frustum and PVS or Software Culling or Hardware Culling)<br>
+foreach VisibleGeometry  : FilterVisibleGeometrys<br>
+	foreach Triangle : VisibleGeometry.Mesh<br>
 		Vertex Light<br>
 		Triangle Transform (Object Space > Camera Cullling Space > Screen Space)<br>
 		Face Culling<br>
@@ -27,6 +28,7 @@ foreach VisibleObject : FilterVisibleObjects<br>
 		foreach Pixel : Triangle<br>
 			if (ZTest & AlphaTest)<br>
 				Render Pixel<br>
+{% endhighlight %}
 				
 <br>
 ## 渲染管线详解
