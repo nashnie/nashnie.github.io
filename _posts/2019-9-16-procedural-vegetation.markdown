@@ -9,6 +9,7 @@ categories: none
 手游品质越来越高，大地形的游戏越来越多，人力生成植被越来越满足不了策划日渐膨胀的内心，程序化的植被生成技术就运用到项目里来了，所以“策划推动技术发展”……<br>
 这项技术具体要解决什么样的策划需求呢？<br>
 上图，大地形环境下的大自然地貌。<br>
+![](/images/procedural-vegetation1.png)<br>
 再细分一下需求。<br>
 不同地形，比如高度、温度、湿度、阳光甚至经纬度等决定了植被的生长，同时植被在斜坡上有比较规律但是又有一些随机的朝向，有不同密度，有不同的树龄等等。<br>
 我们细化这些表现需求之后，得出具体要实现的细节。<br>
@@ -82,6 +83,9 @@ float UProceduralFoliageTile::GetRandomGaussian()
 
 #### Color
 我们目前采用的是根据植被世界坐标随机颜色的做法。<br>
+FarCry5 采用了根据树龄或者生存能力两项来决定颜色的做法。<br>
+#### 最后放一张 Farcry5 的截图。大家感受一下。<br>
+![](/images/procedural-vegetation2.png)<br>
 
 For more details see <br>
 [Procedural World Generation of Ubisoft’s Far Cry 5](https://vimeo.com/273986776)<br>
