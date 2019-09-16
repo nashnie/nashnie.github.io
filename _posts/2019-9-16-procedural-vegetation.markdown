@@ -81,7 +81,7 @@ float UProceduralFoliageTile::GetRandomGaussian()
 {% endhighlight %}
 
 #### Color
-未完待续...<br>
+我们目前采用的是根据植被世界坐标随机颜色的做法。<br>
 
 For more details see <br>
 [Procedural World Generation of Ubisoft’s Far Cry 5](https://vimeo.com/273986776)<br>
