@@ -9,6 +9,7 @@ categories: none
 ### 底层同步浅析
 
 UE dedicated server 同步的代码还是很清晰的，NetDriver、NetSerialization 等等，看起来赏心悦目尤其是 ReplicationGraph，学到了一些思路。<br>
+简单介绍一下基本的流程。<br>
 首先是建立连接，server 和 client 三次握手（handshakes）之后，一个 Client 对应一个 Connection，NetDriver 负责创建对应平台类型的 Socket 以及数据的收发 TickFlush 和 TickDispatcher。<br>
 每一个 Replicator Actor 在每一个 Client Connection 上都有一个 ActorChannel 对应，每一个 Client Connection 同时还有一个额外的 VoiceChannel。<br>
 ActorChannel 负责管理 ClientConnection 和对应 Client 的同步逻辑，也就是 ServerReplicator，负责 Actor 初始化以及销毁，当然还包括 Property 的对比以及同步等。<br>
