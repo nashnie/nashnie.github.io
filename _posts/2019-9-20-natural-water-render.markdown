@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "逼真的自然水渲染细节实现"
+title:  "逼真的自然水渲染细节实现 Writing"
 date:   2019-9-20 01:13:00 +0800
 categories: none
 ---
