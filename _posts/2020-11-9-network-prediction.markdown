@@ -4,8 +4,8 @@ title:  "Network-Prediction"
 date:   2020-11-9 22:20:00 +0800
 categories: none
 ---
-## Network-Prediction
-### Network-Prediction
+## Network Prediction
+### Network Prediction
 
 第一部分 Networked Simulation Model，网络模拟模型，包含三部分。
 
